@@ -173,7 +173,15 @@ Keep a dated running log of decisions. This is what shows a reader how you think
 
 | Date | Decision or finding | Why |
 |---|---|---|
-| [date] | [e.g. Chose 3-year weighted WAR for baseline] | [reason] |
+| 2026-10-14 | Built the 2024 free agent class from Spotrac (copied into a spreadsheet, saved as CSV) | Hand-copying ~150 contracts per year is manageable and avoids scraping a site against its terms of use |
+| 2026-10-14 | Dropped rows with $0 value or 0 years | These were non-guaranteed or minor league deals, not real major league contracts |
+| 2026-10-14 | Created a qualifying_offer flag from the "QO" tag in player names, then removed the tag | Qualifying offers affect market value, and the tag was baked into the name field |
+| 2026-10-14 | Simplified positions to the first listed one (e.g. SP/SP2 becomes SP) | Spotrac adds role notes that would create dozens of tiny categories |
+| 2026-10-14 | Added player_type (pitcher or hitter) based on position | The model will treat hitters and pitchers separately |
+| 2026-10-14 | Recalculated AAV as total value divided by years | Avoids trusting rounded values from the source |
+| 2026-10-14 | For players listed twice, kept the larger contract | The duplicates were $740K league-minimum deals signed after release, not the free agent contract |
+| 2026-10-14 | Left small contracts (under about $5M) in for now | Will test the model with and without them before deciding |
+| 2026-10-14 | Flagged Shohei Ohtani's $700M deal as an outlier | Most of it is deferred, so the headline value overstates what the team pays today |
 
 ## Appendix B: Data Dictionary
 
