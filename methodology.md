@@ -147,8 +147,12 @@ Notes:
 - **Small sample:** Few contracts at the top of the market, so extreme values are poorly estimated.
 - **New metrics have short histories:** Bat speed has been public only since 2023, which limits how much weight it can carry.
 - **Unobserved factors:** Team payroll situation, clubhouse and makeup considerations, medical information, and agent dynamics are not captured.
-- **Outliers:** [Describe how players like Ohtani were handled.]
-- **Market change:** Spending patterns shift over time, and the model may lag a changing market.
+- **Context a stats-only model can't see:** Teams pay for track record, postseason performance, and injury recoveries. For example, Walker Buehler's 2025 contract ($21M AAV) followed a season of negative WAR, but came after strong earlier seasons and a postseason run, so the model underpredicted it.
+- **Outliers:** Shohei Ohtani is excluded from training and evaluation. His contract is mostly deferred, so the headline AAV overstates what the team pays today, and his two-way role does not fit a single hitter or pitcher WAR.
+- **International signees:** Players coming from Japan, Korea, or Cuba with no prior MLB season have no bWAR, so they are left out of the model.
+- **Short 2020 season:** WAR from 2020 covers only 60 games and is not rescaled, which affects the 2021 to 2023 classes that look back at it.
+- **Name matching:** Contracts are joined to stats by player name. Five contracts where one name matched two different players (Chris Young, Luis Garcia) were excluded rather than guessed.
+- **Market change:** Spending patterns shift over time. The baseline underpredicts every class from 2022 on, and the gap widens in the test years, so a year adjustment is tested in Section 7. The collective bargaining agreement also expires after the 2026 season, which could change the 2027 market in ways past data cannot show.
 
 ## 10. Future Work
 
@@ -189,7 +193,7 @@ Run order:
 ## Appendix A: Process Log
 
 | Date | Decision or finding | Why |
-
+|---|---|---|
 | 2026-10-14 | Built the 2024 free agent class from Spotrac (copied into a spreadsheet, saved as CSV) | Hand-copying ~150 contracts per year is manageable and avoids scraping a site against its terms of use |
 | 2026-10-14 | Dropped rows with $0 value or 0 years | These were non-guaranteed or minor league deals, not real major league contracts |
 | 2026-10-14 | Created a qualifying_offer flag from the "QO" tag in player names, then removed the tag | Qualifying offers affect market value, and the tag was baked into the name field |
@@ -208,6 +212,8 @@ Run order:
 | 2026-10-19 | Built 3-season weighted bWAR (weights 5-4-3, most recent highest); missing seasons for known MLB players count as 0; international signees left blank | A multi-season average is less noisy than one year and correlates better with AAV (0.74 vs 0.70); the 2020 short season is not rescaled, which is a known limitation |
 | 2026-10-19 | Pulled birth dates from the MLB Stats API using MLBAM player IDs; age at signing measured on Dec 1 after the final season | The Baseball Reference and Chadwick files contain no birth dates; age is a key driver of contract length and value |
 | 2026-10-19 | Built ridge regression baseline (3-season weighted bWAR, age, age squared, position, qualifying offer); train 2015-2023, test 2024-2026; Ohtani excluded | Establishes the benchmark that Statcast features and the inflation adjustment must beat |
+| 2026-10-19 | Checked baseline errors by year: the model underpredicts every class from 2022 on, and the gap widens in the test years (-0.84M in 2024 to -1.86M in 2026); largest misses are star contracts at roughly half of actual AAV | Confirms market inflation and a star premium that a straight-line model can't capture; next step is testing a year trend and a log target |
+| 2026-10-19 | Tested year trend and log target: the year trend removes the underprediction in test years and lowers MAE on $5M+ contracts ($4.38M to $4.00M) but slightly raises it on all contracts; the log target did not help | Market inflation is real for larger contracts; plan to model $5M+ contracts with a linear year trend |
 
 
 ## Appendix B: Data Dictionary
