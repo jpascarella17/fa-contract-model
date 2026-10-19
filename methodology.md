@@ -95,7 +95,7 @@ Because the number of contracts is limited, simpler regularized models are expec
 
 ## 6. Validation
 
-- **Split:** Train on classes [2015 to 2023]. Test on [2024 and 2025]. No future data is used in any training step.
+- **Split:** Train on classes [2015 to 2023]. Test on [2024 through 2026]. No future data is used in any training step.
 - **Metrics:** MAE and RMSE for AAV and total value; interval coverage.
 - **External benchmark:** MLB Trade Rumors' predicted contracts for the same classes.
 - **Dollar adjustment:** [Describe how contract values were adjusted for market inflation across years.]
@@ -182,6 +182,10 @@ Keep a dated running log of decisions. This is what shows a reader how you think
 | 2026-10-14 | For players listed twice, kept the larger contract | The duplicates were $740K league-minimum deals signed after release, not the free agent contract |
 | 2026-10-14 | Left small contracts (under about $5M) in for now | Will test the model with and without them before deciding |
 | 2026-10-14 | Flagged Shohei Ohtani's $700M deal as an outlier | Most of it is deferred, so the headline value overstates what the team pays today |
+| 2026-10-19 | Added 2026 class as a third test year; final model will be retrained on all years before predicting 2027 | More test contracts give a more reliable accuracy estimate, and the final predictions should use the newest market data |
+| 2026-10-19 | Collected free agent classes from 2015 to 2026 | Statcast-based features are only reliable for later classes, so the baseline model uses all years and the advanced model uses the years with Statcast data |
+| 2026-10-19 | Noted market inflation as a modeling issue; plan to test year-as-feature vs. contracts scaled to a league-wide benchmark | Raw dollars across 2015 to 2026 would let market drift look like differences in player quality |
+| 2026-10-19 | Plan to compare models trained on all contracts vs. $5M+ only; full table kept in contracts.csv | Small deals are present in every class, but they are noisier and may not matter for the 2027 predictions; the effect will be tested, not assumed |
 
 ## Appendix B: Data Dictionary
 
