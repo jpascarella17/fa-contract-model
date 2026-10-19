@@ -169,10 +169,8 @@ Run order:
 
 ## Appendix A: Process Log
 
-Keep a dated running log of decisions. This is what shows a reader how you think.
-
 | Date | Decision or finding | Why |
-|---|---|---|
+
 | 2026-10-14 | Built the 2024 free agent class from Spotrac (copied into a spreadsheet, saved as CSV) | Hand-copying ~150 contracts per year is manageable and avoids scraping a site against its terms of use |
 | 2026-10-14 | Dropped rows with $0 value or 0 years | These were non-guaranteed or minor league deals, not real major league contracts |
 | 2026-10-14 | Created a qualifying_offer flag from the "QO" tag in player names, then removed the tag | Qualifying offers affect market value, and the tag was baked into the name field |
@@ -182,10 +180,15 @@ Keep a dated running log of decisions. This is what shows a reader how you think
 | 2026-10-14 | For players listed twice, kept the larger contract | The duplicates were $740K league-minimum deals signed after release, not the free agent contract |
 | 2026-10-14 | Left small contracts (under about $5M) in for now | Will test the model with and without them before deciding |
 | 2026-10-14 | Flagged Shohei Ohtani's $700M deal as an outlier | Most of it is deferred, so the headline value overstates what the team pays today |
-| 2026-10-19 | Added 2026 class as a third test year; final model will be retrained on all years before predicting 2027 | More test contracts give a more reliable accuracy estimate, and the final predictions should use the newest market data |
-| 2026-10-19 | Collected free agent classes from 2015 to 2026 | Statcast-based features are only reliable for later classes, so the baseline model uses all years and the advanced model uses the years with Statcast data |
-| 2026-10-19 | Noted market inflation as a modeling issue; plan to test year-as-feature vs. contracts scaled to a league-wide benchmark | Raw dollars across 2015 to 2026 would let market drift look like differences in player quality |
-| 2026-10-19 | Plan to compare models trained on all contracts vs. $5M+ only; full table kept in contracts.csv | Small deals are present in every class, but they are noisier and may not matter for the 2027 predictions; the effect will be tested, not assumed |
+| 2026-10-15 | Added 2026 class as a third test year; final model will be retrained on all years before predicting 2027 | More test contracts give a more reliable accuracy estimate, and the final predictions should use the newest market data |
+| 2026-10-15 | Collected free agent classes from 2015 to 2026 | Statcast-based features are only reliable for later classes, so the baseline model uses all years and the advanced model uses the years with Statcast data |
+| 2026-10-16 | Noted market inflation as a modeling issue; plan to test year-as-feature vs. contracts scaled to a league-wide benchmark | Raw dollars across 2015 to 2026 would let market drift look like differences in player quality |
+| 2026-10-16 | Plan to compare models trained on all contracts vs. $5M+ only; full table kept in contracts.csv | Small deals are present in every class, but they are noisier and may not matter for the 2027 predictions; the effect will be tested, not assumed |
+| 2026-10-17 | Using Baseball Reference WAR (bWAR) via pybaseball as the value metric; FanGraphs blocked automated downloads (HTTP 403) | bWAR is available in one bulk file with MLBAM player IDs; Savant percentile data will supply the advanced features later |
+| 2026-10-17 | Joined contracts to bWAR by normalized name and prior season; excluded 5 contracts where a name matched two different players (Chris Young, Luis Garcia); flagged international signees | A wrong match would attach another player's stats to a contract, so ambiguous cases are dropped rather than guessed |
+| 2026-10-19 | Built 3-season weighted bWAR (weights 5-4-3, most recent highest); missing seasons for known MLB players count as 0; international signees left blank | A multi-season average is less noisy than one year and correlates better with AAV (0.74 vs 0.70); the 2020 short season is not rescaled, which is a known limitation |
+| 2026-10-19 | Pulled birth dates from the MLB Stats API using MLBAM player IDs; age at signing measured on Dec 1 after the final season | The Baseball Reference and Chadwick files contain no birth dates; age is a key driver of contract length and value |
+
 
 ## Appendix B: Data Dictionary
 
