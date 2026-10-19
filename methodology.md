@@ -121,8 +121,12 @@ Because the number of contracts is limited, simpler regularized models are expec
 |---|---|---|---|---|
 | Baseline ridge | All | 1,103 / 448 | $3.53M | $5.62M |
 | Baseline ridge | $5M+ only | 561 / 213 | $4.38M | $6.57M |
+| Baseline + year trend | All | 1,103 / 448 | $3.74M | $5.62M |
+| Baseline + year trend | $5M+ only | 561 / 213 | $4.00M | $6.57M |
 
 MAE is the average miss in dollars per year of AAV. The naive model guesses the median training contract for every player. The baseline beats it by about 37% on all contracts and 33% on $5M+ contracts. Each group should be compared only against its own naive number.
+
+Adding a linear year trend removed the underprediction in the test years: the average error on $5M+ contracts moved from -$2.65M to -$0.16M, and MAE on those contracts dropped from $4.38M to $4.00M. On all contracts the average error moved near zero ($-1.28M to +$0.34M), but MAE rose slightly, from $3.53M to $3.74M. A log-transformed target and a peak-WAR feature were also tested and did not help (see the process log in Appendix A).
 
 ### 7.2 Does underlying data help?
 [Compare baseline versus baseline plus Statcast/pitch-shape features. This is the core finding. Include a feature importance or SHAP plot.]
@@ -214,6 +218,7 @@ Run order:
 | 2026-10-19 | Built ridge regression baseline (3-season weighted bWAR, age, age squared, position, qualifying offer); train 2015-2023, test 2024-2026; Ohtani excluded | Establishes the benchmark that Statcast features and the inflation adjustment must beat |
 | 2026-10-19 | Checked baseline errors by year: the model underpredicts every class from 2022 on, and the gap widens in the test years (-0.84M in 2024 to -1.86M in 2026); largest misses are star contracts at roughly half of actual AAV | Confirms market inflation and a star premium that a straight-line model can't capture; next step is testing a year trend and a log target |
 | 2026-10-19 | Tested year trend and log target: the year trend removes the underprediction in test years and lowers MAE on $5M+ contracts ($4.38M to $4.00M) but slightly raises it on all contracts; the log target did not help | Market inflation is real for larger contracts; plan to model $5M+ contracts with a linear year trend |
+| 2026-10-19 | Tested peak single-season WAR over the prior 5 years as an added feature; MAE changed by less than 1% ($3.74M to $3.71M all contracts, $4.00M to $3.99M for $5M+) | A longer track record does not add measurable information beyond the 3-season weighted WAR; feature dropped to keep the model simple |
 
 
 ## Appendix B: Data Dictionary
