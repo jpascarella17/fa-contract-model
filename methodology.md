@@ -64,7 +64,20 @@ The model has two stages.
 ### 5.2 Baseline model
 The baseline uses only traditional inputs: weighted average WAR over the last three seasons, age, and position. Every later model is judged against it.
 
-[Report baseline results here.]
+**Model:** Ridge regression (regularized linear regression)
+
+**Inputs:**
+- 3-season weighted bWAR (weights 5-4-3, most recent season counts most)
+- Age at signing, plus age squared to capture the aging curve
+- Position
+- Qualifying offer status
+
+**Data split:**
+- Train: 2015-2023 classes
+- Test: 2024-2026 classes
+- Shohei Ohtani is excluded because his deferred contract and two-way role make him an outlier
+
+**Results:** See Section 7.1.
 
 ### 5.3 Feature engineering
 
@@ -103,7 +116,13 @@ Because the number of contracts is limited, simpler regularized models are expec
 ## 7. Results
 
 ### 7.1 Model comparison
-[Table: model, MAE, RMSE for AAV and total value.]
+
+| Model | Contracts | Train / Test | MAE (AAV) | Naive MAE (AAV) |
+|---|---|---|---|---|
+| Baseline ridge | All | 1,103 / 448 | $3.53M | $5.62M |
+| Baseline ridge | $5M+ only | 561 / 213 | $4.38M | $6.57M |
+
+MAE is the average miss in dollars per year of AAV. The naive model guesses the median training contract for every player. The baseline beats it by about 37% on all contracts and 33% on $5M+ contracts. Each group should be compared only against its own naive number.
 
 ### 7.2 Does underlying data help?
 [Compare baseline versus baseline plus Statcast/pitch-shape features. This is the core finding. Include a feature importance or SHAP plot.]
