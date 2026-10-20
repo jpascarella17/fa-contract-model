@@ -1,0 +1,258 @@
+player_name,position,all_positions,age_2027,option_note,player_type,has_option
+Travis d’Arnaud,C,C,38,,hitter,False
+Elias Diaz,C,C,36,,hitter,False
+Mitch Garver,C,C,36,,hitter,False
+Austin Hedges,C,C,34,,hitter,False
+Jonah Heim,C,C,32,,hitter,False
+Kyle Higashioka,C,C,37,$7MM mutual option with a $1MM buyout,hitter,True
+Ryan Jeffers,C,C,30,,hitter,False
+Carson Kelly,C,C,32,$7.5MM mutual option with a $1.5MM buyout,hitter,True
+Luke Maile,C,C,36,,hitter,False
+James McCann,C,C,37,,hitter,False
+Reese McGuire,C,C,32,,hitter,False
+Jake Rogers,C,C,32,,hitter,False
+Gary Sanchez,C,C,34,mutual option,hitter,True
+Tyler Stephenson,C,C,30,,hitter,False
+Christian Vazquez,C,C,36,,hitter,False
+Jake Bauers,1B,1B/LF,31,,hitter,False
+Alec Bohm,1B,1B/3B,30,,hitter,False
+Ty France,1B,1B,32,,hitter,False
+Paul Goldschmidt,1B,1B,39,,hitter,False
+Rhys Hoskins,1B,1B,34,,hitter,False
+Nathaniel Lowe,1B,1B,31,,hitter,False
+Ryan Mountcastle,1B,1B,30,$7.5MM club option,hitter,True
+Carlos Santana,1B,1B,41,$2MM mutual option,hitter,True
+Dominic Smith,1B,1B,32,,hitter,False
+Rowdy Tellez,1B,1B,32,,hitter,False
+Ozzie Albies,2B,2B,30,$7MM club option,hitter,True
+Luis Arraez,2B,2B,30,,hitter,False
+Bo Bichette,2B,2B/3B,29,"can opt out of remaining two years, $84MM, resulting in a $5MM buyout",hitter,True
+Jazz Chisholm Jr.,2B,2B/3B,29,,hitter,False
+Mauricio Dubon,2B,2B/SS/3B,32,,hitter,False
+Kyle Farmer,2B,2B,35,,hitter,False
+Adam Frazier,2B,2B,35,,hitter,False
+Jonathan India,2B,2B/3B/LF,30,,hitter,False
+Brandon Lowe,2B,2B,32,,hitter,False
+Gavin Lux,2B,2B/LF,29,,hitter,False
+Nick Madrigal,2B,2B,30,,hitter,False
+Dylan Moore,2B,2B,34,,hitter,False
+Amed Rosario,2B,2B,31,,hitter,False
+Lenyn Sosa,2B,2B,27,,hitter,False
+Gleyber Torres,2B,2B,30,,hitter,False
+Luis Urias,2B,2B,30,,hitter,False
+Ildemaro Vargas,2B,2B,35,,hitter,False
+Orlando Arcia,SS,SS,32,,hitter,False
+J.P. Crawford,SS,SS,32,,hitter,False
+Paul DeJong,SS,SS,33,,hitter,False
+Ha-Seong Kim,SS,SS,31,,hitter,False
+Isiah Kiner-Falefa,SS,SS,32,,hitter,False
+Jorge Mateo,SS,SS,32,,hitter,False
+Kevin Newman,SS,SS,33,,hitter,False
+Zack Short,SS,SS,32,,hitter,False
+Jeimer Candelario,3B,3B,33,,hitter,False
+Santiago Espinal,3B,3B,32,,hitter,False
+Kiké Hernandez,3B,3B,35,,hitter,False
+Leo Jimenez,3B,3B,26,,hitter,False
+Yoan Moncada,3B,3B,32,,hitter,False
+Anthony Rendon,3B,3B,37,,hitter,False
+Luis Rengifo,3B,3B,30,,hitter,False
+Josh Rojas,3B,3B,33,,hitter,False
+Edmundo Sosa,3B,3B,31,,hitter,False
+Ramon Urias,3B,3B,33,,hitter,False
+Miguel Andujar,LF,LF,32,$8MM mutual option with a $2.5MM buyout,hitter,True
+Randy Arozarena,LF,LF,32,,hitter,False
+Dylan Carlson,LF,LF,28,,hitter,False
+Michael Conforto,LF,LF,34,,hitter,False
+Lourdes Gurriel Jr.,LF,LF,33,,hitter,False
+Sam Haggerty,LF,LF,33,,hitter,False
+Ian Happ,LF,LF,32,,hitter,False
+Austin Hays,LF,LF,31,$8MM mutual option with a $1MM buyout,hitter,True
+Ramon Laureano,LF,LF/RF,32,,hitter,False
+MJ Melendez,LF,LF/DH,28,,hitter,False
+Tommy Pham,LF,LF,39,,hitter,False
+Rob Refsnyder,LF,LF,36,,hitter,False
+Taylor Ward,LF,LF,33,,hitter,False
+TJ Friedl,CF,CF,31,,hitter,False
+Trent Grisham,CF,CF,30,,hitter,False
+Jeff McNeil,CF,CF,35,$15.75MM club option with a $2MM buyout,hitter,True
+Cedric Mullins,CF,CF,32,$10MM mutual option with a $500K buyout,hitter,True
+Luis Robert Jr.,CF,CF,29,$20MM club option with a $2MM buyout,hitter,True
+Victor Robles,CF,CF,30,$9MM club option with a $500K buyout,hitter,True
+Myles Straw,CF,CF,32,$8MM club option with a $1.75MM buyout,hitter,True
+Tyrone Taylor,CF,CF,33,,hitter,False
+Alek Thomas,CF,CF,27,,hitter,False
+Lane Thomas,CF,CF,31,,hitter,False
+Daulton Varsho,CF,CF,30,,hitter,False
+Ronald Acuña Jr.,RF,RF,29,$17MM club option with a $10MM buyout,hitter,True
+Will Benson,RF,RF,29,,hitter,False
+Nick Castellanos,RF,RF,35,,hitter,False
+Jake Fraley,RF,RF,32,,hitter,False
+Tyler Freeman,RF,RF,28,,hitter,False
+Adolis Garcia,RF,RF,34,,hitter,False
+Randal Grichuk,RF,RF,35,,hitter,False
+Max Kepler,RF,RF,34,,hitter,False
+Austin Slater,RF,RF,34,,hitter,False
+Jorge Soler,RF,RF/DH,35,,hitter,False
+George Springer,RF,RF/DH,37,,hitter,False
+Seiya Suzuki,RF,RF,32,,hitter,False
+Mike Tauchman,RF,RF,36,,hitter,False
+Josh Bell,DH,DH,34,$10MM mutual option with a $1.25MM buyout,hitter,True
+Starling Marte,DH,DH,38,,hitter,False
+Andrew McCutchen,DH,DH,40,,hitter,False
+Marcell Ozuna,DH,DH,36,$16MM mutual option with a $1.5MM buyout,hitter,True
+Joc Pederson,DH,DH,35,$18.5MM mutual option (no buyout),hitter,True
+Eugenio Suarez,DH,DH,35,$16MM mutual option (no buyout),hitter,True
+Sandy Alcantara,SP,SP,31,$21MM club option with a $2MM buyout,pitcher,True
+Chris Bassitt,SP,SP,38,,pitcher,False
+Jose Berrios,SP,SP,33,"can opt out of remaining two years, $48MM",pitcher,True
+Shane Bieber,SP,SP,32,,pitcher,False
+Paul Blackburn,SP,SP,33,,pitcher,False
+Matthew Boyd,SP,SP,36,$15MM mutual option with a $2MM buyout,pitcher,True
+Kris Bubic,SP,SP,29,,pitcher,False
+Walker Buehler,SP,SP,32,,pitcher,False
+Corbin Burnes,SP,SP,32,can opt out of remaining four years and $140MM,pitcher,True
+Griffin Canning,SP,SP,31,$5MM mutual option with a $1.5MM buyout,pitcher,True
+Carlos Carrasco,SP,SP,40,,pitcher,False
+Aaron Civale,SP,SP,32,,pitcher,False
+Patrick Corbin,SP,SP,37,,pitcher,False
+Zach Eflin,SP,SP,33,$25MM mutual option with a $2MM buyout,pitcher,True
+Erick Fedde,SP,SP,34,,pitcher,False
+Jack Flaherty,SP,SP,31,,pitcher,False
+Kyle Freeland,SP,SP,34,$17MM player option for 2027 with 170 innings pitched in 2026,pitcher,True
+Zac Gallen,SP,SP,31,,pitcher,False
+Kevin Gausman,SP,SP,36,,pitcher,False
+Lucas Giolito,SP,SP,32,$8MM mutual option with a $1.5MM buyout,pitcher,True
+Tony Gonsolin,SP,SP,33,$2.5MM club option,pitcher,True
+Sonny Gray,SP,SP,37,$30MM mutual option with a $10MM buyout,pitcher,True
+Foster Griffin,SP,SP,31,,pitcher,False
+Kyle Hart,SP,SP,34,$2.5MM club option with $200K buyout,pitcher,True
+Clay Holmes,SP,SP,34,"can opt out of remaining one year, $12MM",pitcher,True
+Tatsuya Imai,SP,SP,29,"can opt out of remaining two years, $36MM",pitcher,True
+Shota Imanaga,SP,SP,33,,pitcher,False
+Michael King,SP,SP,32,"can opt out of remaining two years, $58MM for a $5MM buyout",pitcher,True
+Zack Littell,SP,SP,31,,pitcher,False
+Michael Lorenzen,SP,SP,35,,pitcher,False
+Tyler Mahle,SP,SP,32,,pitcher,False
+German Marquez,SP,SP,32,,pitcher,False
+Nick Martinez,SP,SP/RP,36,$20MM mutual option with a $4MM buyout,pitcher,True
+Dustin May,SP,SP,29,$20MM mutual option with a $500K buyout,pitcher,True
+Lance McCullers Jr.,SP,SP,33,,pitcher,False
+Miles Mikolas,SP,SP,38,,pitcher,False
+Casey Mize,SP,SP,30,,pitcher,False
+Frankie Montas,SP,SP,34,,pitcher,False
+Jordan Montgomery,SP,SP,34,,pitcher,False
+Chris Paddack,SP,SP,31,,pitcher,False
+Freddy Peralta,SP,SP,31,,pitcher,False
+Martin Perez,SP,SP,36,,pitcher,False
+David Peterson,SP,SP,31,,pitcher,False
+Nick Pivetta,SP,SP,34,$14MM club option (no buyout),pitcher,True
+Cal Quantrill,SP,SP,32,,pitcher,False
+Jose Quintana,SP,SP,38,,pitcher,False
+Drew Rasmussen,SP,SP,31,$20MM club option with a $500K buyout,pitcher,True
+Robbie Ray,SP,SP,35,,pitcher,False
+Colin Rea,SP,SP,36,$7.5MM club option with a $1MM buyout,pitcher,True
+Trevor Rogers,SP,SP,29,,pitcher,False
+Patrick Sandoval,SP,SP,29,,pitcher,False
+Max Scherzer,SP,SP,42,,pitcher,False
+Luis Severino,SP,SP,33,$22MM player option,pitcher,True
+Brady Singer,SP,SP,30,,pitcher,False
+Tarik Skubal,SP,SP,30,,pitcher,False
+Michael Soroka,SP,SP,29,$10MM mutual option with a $1MM buyout,pitcher,True
+Jeffrey Springs,SP,SP,34,$15MM club option with a $750K buyout,pitcher,True
+Tomoyuki Sugano,SP,SP,37,,pitcher,False
+Jameson Taillon,SP,SP,35,,pitcher,False
+Taijuan Walker,SP,SP,34,,pitcher,False
+Ryan Weiss,SP,SP/RP,30,$5MM club option with a $500K buyout,pitcher,True
+Trevor Williams,SP,SP,35,,pitcher,False
+Brandon Woodruff,SP,SP,33,,pitcher,False
+Kyle Wright,SP,SP,31,,pitcher,False
+Bryan Abreu,RP,RP,30,,pitcher,False
+Jason Adam,RP,RP,35,,pitcher,False
+Jorge Alcala,RP,RP,31,,pitcher,False
+Drew Anderson,RP,RP,33,$10MM club option with no buyout,pitcher,True
+Shawn Armstrong,RP,RP,36,$8MM mutual option with a $1.5MM buyout,pitcher,True
+Scott Barlow,RP,RP,34,,pitcher,False
+David Bednar,RP,RP,32,,pitcher,False
+Taylor Clarke,RP,RP,34,,pitcher,False
+Emmanuel Clase,RP,RP,29,$10MM club option with a $2MM buyout,pitcher,True
+Enyel De Los Santos,RP,RP,31,,pitcher,False
+Chris Devenski,RP,RP,36,,pitcher,False
+Carlos Estevez,RP,RP,34,$13MM club option with a $2MM buyout,pitcher,True
+Pete Fairbanks,RP,RP,33,,pitcher,False
+Luis Garcia,RP,RP,40,,pitcher,False
+Yimi Garcia,RP,RP,36,,pitcher,False
+Kevin Ginkel,RP,RP,33,,pitcher,False
+Brusdar Graterol,RP,RP,28,,pitcher,False
+Hunter Harvey,RP,RP,32,$8MM mutual option with a $1MM buyout,pitcher,True
+Ryan Helsley,RP,RP,32,"can opt out of remaining one year, $14MM",pitcher,True
+Raisel Iglesias,RP,RP,37,,pitcher,False
+Kenley Jansen,RP,RP,39,$12MM club option with a $2MM buyout,pitcher,True
+Joe Jimenez,RP,RP,31,,pitcher,False
+Pierce Johnson,RP,RP,36,$8MM mutual option with a $1MM buyout,pitcher,True
+Jakob Junis,RP,RP,34,$5MM mutual option with a $1.25MM buyout,pitcher,True
+Tommy Kahnle,RP,RP,37,,pitcher,False
+Tyler Kinley,RP,RP,36,,pitcher,False
+Andrew Kittredge,RP,RP,37,,pitcher,False
+Justin Lawrence,RP,RP,32,,pitcher,False
+Mark Leiter Jr.,RP,RP,36,,pitcher,False
+Jonathan Loaisiga,RP,RP,32,,pitcher,False
+Chris Martin,RP,RP,41,,pitcher,False
+Andres Muñoz,RP,RP,28,$8MM club option,pitcher,True
+Emilio Pagan,RP,RP,36,$10MM player option,pitcher,True
+Evan Phillips,RP,RP,32,,pitcher,False
+Tanner Rainey,RP,RP,34,,pitcher,False
+Trevor Richards,RP,RP,34,,pitcher,False
+Jordan Romano,RP,RP,34,,pitcher,False
+Joe Ross,RP,RP,34,,pitcher,False
+Dennis Santana,RP,RP,31,,pitcher,False
+John Schreiber,RP,RP,33,,pitcher,False
+Antonio Senzatela,RP,RP,32,$14MM club option,pitcher,True
+Paul Sewald,RP,RP,37,,pitcher,False
+Ryne Stanek,RP,RP,35,$6MM club option with a $1MM buyout,pitcher,True
+Trevor Stephan,RP,RP,31,$7.25MM club option with a $1.25MM buyout,pitcher,True
+Robert Stephenson,RP,RP,34,$2.5MM club option,pitcher,True
+Ryan Thompson,RP,RP,35,,pitcher,False
+Trent Thornton,RP,RP,33,,pitcher,False
+Justin Topa,RP,RP,36,,pitcher,False
+Blake Treinen,RP,RP,39,,pitcher,False
+Lou Trivino,RP,RP,35,,pitcher,False
+Jacob Webb,RP,RP,33,$2.5MM club option (no buyout),pitcher,True
+Garrett Whitlock,RP,RP,31,$8.25MM club option with a $1MM buyout,pitcher,True
+Rowan Wick,RP,RP,34,$800K club option with a $100K buyout,pitcher,True
+Jake Woodford,RP,RP,30,,pitcher,False
+Keegan Akin,RP,RP,32,,pitcher,False
+Tyler Alexander,RP,RP,32,,pitcher,False
+Kolby Allard,RP,RP,29,,pitcher,False
+Jose Alvarado,RP,RP,32,,pitcher,False
+Jalen Beeks,RP,RP,33,,pitcher,False
+Ryan Borucki,RP,RP,33,,pitcher,False
+Aaron Bummer,RP,RP,33,,pitcher,False
+Brock Burke,RP,RP,30,,pitcher,False
+Andrew Chafin,RP,RP,37,,pitcher,False
+Aroldis Chapman,RP,RP,39,$13MM mutual option with a $300K buyout.  Guaranteed if Chapman pitches 40 innings in 2026 (met) and passes post-season physical exam,pitcher,True
+Danny Coulombe,RP,RP,37,,pitcher,False
+Dietrich Enns,RP,RP,36,,pitcher,False
+Caleb Ferguson,RP,RP,30,,pitcher,False
+Tim Hill,RP,RP,37,,pitcher,False
+Joey Lucchesi,RP,RP,34,,pitcher,False
+Yuki Matsui,RP,RP,31,"can opt out of remaining two years, $13.5MM",pitcher,True
+Tim Mayza,RP,RP,35,,pitcher,False
+Hoby Milner,RP,RP,36,,pitcher,False
+A.J. Minter,RP,RP,33,,pitcher,False
+Sam Moll,RP,RP,35,,pitcher,False
+Adrian Morejon,RP,RP,28,,pitcher,False
+Sean Newcomb,RP,RP,34,,pitcher,False
+Steven Okert,RP,RP,35,,pitcher,False
+Wandy Peralta,RP,RP,35,$4.45MM player option,pitcher,True
+Drew Pomeranz,RP,RP,38,,pitcher,False
+A.J. Puk,RP,RP,32,,pitcher,False
+Brooks Raley,RP,RP,39,,pitcher,False
+Taylor Rogers,RP,RP,36,,pitcher,False
+JoJo Romero,RP,RP,30,,pitcher,False
+Gregory Soto,RP,RP,32,,pitcher,False
+Matt Strahm,RP,RP,35,,pitcher,False
+Jose Suarez,RP,RP,29,,pitcher,False
+Brent Suter,RP,RP,37,,pitcher,False
+Caleb Thielbar,RP,RP,40,$6MM mutual option with a $500K buyout,pitcher,True
+Alex Vesia,RP,RP,31,,pitcher,False
+Ryan Yarbrough,RP,RP,35,,pitcher,False
