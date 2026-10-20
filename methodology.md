@@ -145,7 +145,18 @@ Results come from a rolling-year check: for each year from 2021 to 2026, the mod
 [Compare to MLB Trade Rumors. Be honest about where the model is better, worse, or about equal.]
 
 ### 7.4 Largest misses
-[Examine the biggest errors. What did the model not know? Injuries, team context, a surprise team, a unique skill set?]
+
+Errors were checked by weighted WAR band using the WAR-only hitter model, retrained on all earlier classes for each test year from 2021 to 2026. Bias is predicted minus actual AAV, in millions of dollars.
+
+| Weighted WAR | Contracts | Actual AAV | Predicted AAV | Bias |
+|---|---|---|---|---|
+| Under 0.5 | 8 | 6.8 | 5.7 | -1.2 |
+| 0.5 to 1.3 | 53 | 7.2 | 8.2 | +1.0 |
+| 1.3 to 2.3 | 56 | 11.0 | 10.9 | -0.1 |
+| 2.3 to 3.5 | 38 | 17.5 | 15.3 | -2.1 |
+| 3.5 and up | 23 | 28.1 | 21.7 | -6.4 |
+
+The model is well calibrated in the middle of the market but underpredicts stars. In the 2025 and 2026 classes the gap for 3.5+ WAR hitters was about -$9.9M (8 contracts), so the sample at the top is small. Predictions for the highest-value players in the 2027 class should be read as lower bounds.
 
 ## 8. 2027 Free Agent Projections
 
@@ -161,7 +172,7 @@ Notes:
 - **Small sample:** Few contracts at the top of the market, so extreme values are poorly estimated.
 - **New metrics have short histories:** Bat speed has been public only since 2023, which limits how much weight it can carry.
 - **Unobserved factors:** Team payroll situation, clubhouse and makeup considerations, medical information, and agent dynamics are not captured.
-- **Context a stats-only model can't see:** Teams pay for track record, postseason performance, and injury recoveries. For example, Walker Buehler's 2025 contract ($21M AAV) followed a season of negative WAR, but came after strong earlier seasons and a postseason run, so the model underpredicted it.
+- **Context a stats-only model can't see:** Teams pay for track record, postseason performance, and injury recoveries. For example, Walker Buehler's 2025 contract ($21M AAV) followed a season of negative WAR, but came after strong earlier seasons and a postseason run, so the model underpredicted it. Ronald Acuña Jr. (a former MVP) is a similar case in the 2027 class: he had 222, 412, and 469 plate appearances in 2024 to 2026, so his weighted WAR reflects reduced playing time and lower production than his 2023 season (8.4 WAR), which falls outside the model's three-season window. Notes like these are kept in a separate column of the predictions file instead of adjusting any model output.
 - **Outliers:** Shohei Ohtani is excluded from training and evaluation. His contract is mostly deferred, so the headline AAV overstates what the team pays today, and his two-way role does not fit a single hitter or pitcher WAR.
 - **International signees:** Players coming from Japan, Korea, or Cuba with no prior MLB season have no bWAR, so they are left out of the model.
 - **Short 2020 season:** WAR from 2020 covers only 60 games and is not rescaled, which affects the 2021 to 2023 classes that look back at it.
@@ -242,6 +253,7 @@ Run order:
 | 2026-10-19 | Sanity-checked the 2027 predictions against hitters in the 2025-26 classes with similar weighted WAR (1.3 to 2.3): 18 contracts, median AAV $10.1M, middle half $7.0M to $14.4M. Several predictions (Grisham $18.9M, Acuña $20.8M, Crawford $17.6M) sit above that range | The model may overshoot mid-tier hitters; one possible cause is one-year qualifying-offer acceptances in the training data (for example a $22.0M one-year deal that matches the qualifying offer amount), which are set by formula rather than by the market; being checked |
 | 2026-10-19 | Found that one-year qualifying-offer acceptances (for example five 2026 deals at exactly $22.02M and Martinez at $21.05M in 2025) were in the training data; removed them into contracts_model.csv and re-ran the 2027 predictions | Accepted qualifying offers are priced by a league-wide formula, not by the market, so they mislabel market value; their true market price is unobserved, so they are dropped instead of relabeled |
 | 2026-10-19 | Removed qualifying-offer acceptances from training and re-ran the 2027 predictions: changes were at most $0.4M for the top 15 players (average -$0.1M) | These were not the cause of the mid-tier overshoot suspected earlier; the exclusion is kept because those salaries are set by formula, not the market; the sanity check against comparable hitters was matched on WAR alone, so it is being replaced by a calibration check on past out-of-sample errors |
+| 2026-10-19 | Checked calibration by weighted WAR band on out-of-sample errors (2021-2026, WAR-only hitter model): bias is near zero for 1.3-2.3 WAR (-$0.1M, 56 contracts) but -$2.1M for 2.3-3.5 WAR and -$6.4M for 3.5+ WAR (about -$9.9M in 2025-26); testing a squared WAR term | The model compresses toward the middle: mid-tier predictions are reasonable, star predictions are too low; this replaced the earlier crude comparable-hitters check |
 
 
 ## Appendix B: Data Dictionary
