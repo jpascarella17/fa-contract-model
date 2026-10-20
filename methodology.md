@@ -129,7 +129,17 @@ MAE is the average miss in dollars per year of AAV. The naive model guesses the 
 Adding a linear year trend removed the underprediction in the test years: the average error on $5M+ contracts moved from -$2.65M to -$0.16M, and MAE on those contracts dropped from $4.38M to $4.00M. On all contracts the average error moved near zero ($-1.28M to +$0.34M), but MAE rose slightly, from $3.53M to $3.74M. A log-transformed target and a peak-WAR feature were also tested and did not help (see the process log in Appendix A).
 
 ### 7.2 Does underlying data help?
-[Compare baseline versus baseline plus Statcast/pitch-shape features. This is the core finding. Include a feature importance or SHAP plot.]
+
+Savant percentile ranks (expected and actual contact quality, barrel rate, exit velocity, plate discipline, sprint speed for hitters; xERA, fastball velocity, strikeout, walk, whiff, and chase rates for pitchers) were added to the WAR-based model and graded on the same contracts. Only $5M+ contracts with Savant data are included, and each Savant feature is a 3-season weighted average of percentile ranks, matching the WAR weighting.
+
+| Group | Model | Pooled MAE | Years better than WAR-only |
+|---|---|---|---|
+| Hitters | WAR + age + year trend | $3.93M | n/a |
+| Hitters | + Savant percentiles | $3.67M | 3 of 6 |
+| Pitchers | WAR + age + year trend | $3.46M | n/a |
+| Pitchers | + Savant percentiles | $3.28M | 6 of 6 |
+
+Results come from a rolling-year check: for each year from 2021 to 2026, the models trained on all earlier classes and predicted that class. Savant improved pitcher predictions in every year, by a small margin. For hitters the improvement appeared only in 2024 to 2026 and was slightly negative in 2021 to 2023, possibly because early training sets are small and Savant history is sparse for the oldest classes. On the fixed 2024-2026 test split, a Savant-only model (no WAR) matched the WAR model for hitters ($4.94M vs $4.93M) and was slightly worse for pitchers ($3.87M vs $3.69M).
 
 ### 7.3 Benchmark against public predictions
 [Compare to MLB Trade Rumors. Be honest about where the model is better, worse, or about equal.]
@@ -221,6 +231,8 @@ Run order:
 | 2026-10-19 | Tested peak single-season WAR over the prior 5 years as an added feature; MAE changed by less than 1% ($3.74M to $3.71M all contracts, $4.00M to $3.99M for $5M+) | A longer track record does not add measurable information beyond the 3-season weighted WAR; feature dropped to keep the model simple |
 | 2026-10-19 | Chose Baseball Savant percentile ranks (via pybaseball) as the source of advanced features for a second model, to be compared against the WAR-based baseline on the same contracts | Percentiles are ranked within each season, so they are comparable across years; a side-by-side comparison measures how much underlying skill adds beyond WAR and age |
 | 2026-10-19 | Downloaded Savant percentile ranks for hitters and pitchers, 2015-2026 (savant_hitters.csv, savant_pitchers.csv); bat speed is available only from 2023; about 35-42% of listed players per season have batted-ball metrics | Savant history starts in 2015, so the 2015 class has none and the 2016-2017 classes have fewer than three seasons; players without the main quality metric are excluded from the Savant comparison, and both models are graded on the same contracts |
+| 2026-10-19 | Compared WAR-only (A), WAR + Savant percentiles (B), and Savant-only (C) on $5M+ contracts with Savant data; train 2015-2023, test 2024-2026. Hitters (214 train / 77 test): A $4.93M, B $4.18M, C $4.94M. Pitchers (271 / 127): A $3.69M, B $3.43M, C $3.87M | Savant features lowered error by about 15% for hitters and 7% for pitchers; Savant alone matched WAR for hitters; test sets are small and from a single split, so a rolling-year check follows |
+| 2026-10-19 | Rolling-year check (train on all prior years, test on each of 2021-2026) of WAR-only vs WAR + Savant. Hitters: pooled MAE $3.93M vs $3.67M, Savant better in 3 of 6 years (gains only in 2024-2026). Pitchers: $3.46M vs $3.28M, Savant better in 6 of 6 years | The single-split hitter gain (15%) was overstated; the pooled gain is about 7% for hitters and 5% for pitchers; using the WAR + Savant model for both in the 2027 predictions |
 
 
 ## Appendix B: Data Dictionary
