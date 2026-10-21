@@ -154,6 +154,16 @@ The model's out-of-sample AAV predictions were compared to MLB Trade Rumors' ann
 
 MAE is the average miss in millions of dollars per year of AAV; bias is predicted minus actual, so negative means too low. MLBTR's predictions were closer in every class, and the model's average miss was about 31% larger. Both sources underpredicted recent classes, and the gap widened: the model's bias grew from -$1.71M in 2024 to -$3.48M in 2026. This is likely partly because recent deals were shorter with higher annual values than predicted (for example, MLBTR projected Kyle Tucker at 11 years and $400 million, and he signed for 4 years and $240 million), which the model cannot capture because it does not yet predict contract length. MLBTR's own predictions missed contract length by 0.9 years and total value by about $20 million on average. A stats-only model landing within about $1 million per year of an expert panel that also weighs injuries, team needs, and market information is a reasonable result, but the model is behind.
 
+The gap is concentrated at the top of the market. Grouping the 120 scored players by actual AAV:
+
+| Actual AAV | Players | MLBTR MAE | Model MAE | MLBTR bias | Model bias |
+|---|---|---|---|---|---|
+| Under $10M | 21 | $2.36M | $2.60M | +$1.34M | +$2.20M |
+| $10M-$20M | 69 | $2.58M | $2.84M | -$0.15M | -$1.43M |
+| $20M and up | 30 | $5.02M | $8.16M | -$4.94M | -$8.14M |
+
+MLBTR was closer on 73 of 120 players (61%). Roughly 80% of the model's extra error comes from the 30 contracts of $20 million or more; below that level the two are within about $0.3 million of each other. Grouping by actual contract size exaggerates underprediction for both sources, since the players with the largest deals are the ones both missed on the low side, but the comparison between the two is on the same players.
+
 ### 7.4 Largest misses
 
 Errors were checked by weighted WAR band using the WAR-only hitter model, retrained on all earlier classes for each test year from 2021 to 2026. Bias is predicted minus actual AAV, in millions of dollars.
@@ -190,6 +200,7 @@ Notes:
 - **Market change:** Spending patterns shift over time. The baseline underpredicts every class from 2022 on, and the gap widens in the test years, so a year adjustment is tested in Section 7. The collective bargaining agreement also expires after the 2026 season, which could change the 2027 market in ways past data cannot show.
 - **Qualifying offers:** Players who accept a qualifying offer take a formula-set one-year price instead of a market contract, so their market value is unobserved. They are excluded from training, which may remove some below-market cases.
 - **Benchmark scope:** The comparison to MLB Trade Rumors covers only players in their top 50 with an MLB track record and a market contract of at least $5 million, which is the top of the market where the model is weakest. Some model design choices (a year trend, removing qualifying-offer acceptances) were made while looking at the same 2024-2026 results used for the comparison, so the reported accuracy is probably optimistic.
+- **Dropped contract rows:** Rows with no contract value in the source table were removed as minor league or non-guaranteed deals. At least one real major league re-signing (Jason Heyward, 2024) was removed this way, so the contracts table may be missing some mid-tier deals; an audit is in progress.
 
 ## 10. Future Work
 
@@ -270,6 +281,7 @@ Run order:
 | 2026-10-21 | Chose MLB Trade Rumors' annual Top 50 Free Agents With Predictions for the 2024, 2025, and 2026 classes as an external benchmark; their predicted AAV (total divided by years) will be compared to the model's out-of-sample predictions for the same players | A respected public projection is the standard to measure against; international signees and players outside the top 50 are excluded, so the comparison covers the high end of the market only |
 | 2026-10-21 | Parsed MLBTR's Top 50 Free Agents With Predictions for the 2024, 2025, and 2026 classes into mlbtr_predictions.csv (150 predictions; MLBTR's heading format changes by year, so the parser handles three styles); raw article text is kept out of the repo | Provides the external benchmark; only the extracted numbers (years, total, AAV) are published |
 | 2026-10-21 | Benchmarked out-of-sample AAV predictions against MLBTR's Top 50 predictions for 2024-2026 (120 players scored): pooled MAE $3.15M for MLBTR vs $4.13M for the model; MLBTR closer in every class; both underpredict recent classes and the model's bias grew from -$1.71M to -$3.48M | The model is behind the expert benchmark, mostly at the top of the market; contract length is not modeled, which likely contributes in recent classes when deals got shorter; the model's design choices were made while looking at the same test years, so true out-of-sample performance is probably no better than shown |
+| 2026-10-21 | Broke the MLBTR benchmark down by contract size: model and MLBTR within about $0.3M MAE below $20M AAV, but $8.16M vs $5.02M MAE for the 30 contracts of $20M or more (about 80% of the model's extra error). Of 30 unscored MLBTR players: 13 international or Ohtani, 6 qualifying-offer acceptances, 7 under $5M, 4 missing from the contracts table (Urshela, Heyward, Belt, Junis) | The model is competitive for most of the market and weakest for stars; found that dropping all $0-value rows also removed at least one real contract (Heyward re-signed for $9M in 2024), so an audit of dropped rows is under way |
 
 
 ## Appendix B: Data Dictionary
