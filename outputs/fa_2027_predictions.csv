@@ -1,5 +1,5 @@
 player_name,position,age_at_signing,war_w,pred_aav_m,low_m,high_m,model,option_note,below_5m_floor,note
-Tarik Skubal,SP,30.0,5.7,32.2,28.1,38.3,WAR + Savant,,False,outlier: model likely far too low
+Tarik Skubal,SP,30.0,5.7,32.2,28.1,38.3,WAR + Savant,,False,"outlier: model output is a floor. Closest precedent by age and weighted WAR is Gerrit Cole (2020): 9 years, $324M ($36M AAV); top pitcher AAVs excluding Ohtani are about $34M-$43M. MLBTR expects over $400M"
 Seiya Suzuki,RF,32.3,3.9,24.0,19.9,30.7,WAR + Savant,,False,
 Drew Rasmussen,SP,31.3,3.6,22.9,18.7,29.0,WAR + Savant,$20MM club option with a $500K buyout,False,
 Randy Arozarena,LF,31.8,4.1,21.3,17.2,28.0,WAR + Savant,,False,
@@ -152,7 +152,7 @@ Dietrich Enns,RP,35.5,0.2,7.2,2.8,13.3,WAR only,,False,
 Robert Stephenson,RP,33.8,0.1,7.2,2.7,13.3,WAR only,$2.5MM club option,False,
 Keegan Akin,RP,31.7,0.4,7.2,3.0,13.2,WAR + Savant,,False,
 Jake Rogers,C,31.6,0.3,7.1,2.8,15.0,WAR only,,False,
-Kyle Freeland,SP,33.5,0.3,7.1,3.0,13.2,WAR + Savant,$17MM player option for 2027 with 170 innings pitched in 2026,False,
+Kyle Freeland,SP,33.5,0.3,7.1,3.0,13.2,WAR + Savant,$17MM player option for 2027 with 170 innings pitched in 2026,False,2027 player option did not vest (under 170 IP in 2026); treated as a free agent
 Lane Thomas,CF,31.3,0.0,7.1,3.0,13.8,WAR + Savant,,False,
 Yimi Garcia,RP,36.3,0.2,7.0,2.6,13.2,WAR only,,False,
 Kevin Newman,SS,33.3,0.3,7.0,2.7,14.9,WAR only,,False,
