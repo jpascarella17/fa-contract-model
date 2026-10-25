@@ -226,6 +226,19 @@ Notes:
 - Predictions under $5 million only mean "a small deal", since the models were trained on contracts of $5 million or more.
 - Qualifying offers are not yet known and are set to zero for all players, so players likely to receive one may be projected slightly low.
 
+### Option and opt-out calls
+
+For the 61 players with an option or opt-out noted by MLB Trade Rumors (Kyle Freeland is excluded because his player option did not vest), each projected AAV was compared with what the option costs. Club and mutual options use the option salary minus any buyout; player options use the option salary; opt-outs compare the projected AAV (plus the buyout spread over the remaining years) with the remaining guaranteed money per year. Gaps within $4 million, about the model's average AAV miss, are labeled toss-ups; larger gaps are labeled lean (up to $8 million) or strong. A mutual option needs both sides to agree, so it is labeled by which side would want it. Full results are in `outputs/fa_2027_option_calls.csv`.
+
+| Option type | Players | Clear call | Toss-up | Other |
+|---|---|---|---|---|
+| Club | 25 | 7 exercise, 4 decline | 14 | |
+| Mutual | 25 | 7 declined (3 where the club would keep the player, 4 where the player would take it) | 16 | 2 (Chapman guaranteed, Sanchez terms not listed) |
+| Player | 3 | 1 exercise | 2 | |
+| Opt-out | 8 | 5 stay, 0 opt out | 3 | |
+
+The clearest calls are the club exercising Ronald Acuña Jr.'s option (net cost $7.0 million against a projected $20.8 million a year), the club declining Sandy Alcantara's and Luis Robert Jr.'s options, and Luis Severino exercising his $22 million player option against a projected $14.1 million. The share of toss-ups depends on the margin: 25 of 61 at $2.5 million, 36 at $4 million (35 after Chapman's option, which is guaranteed, is set aside), and 47 at $6 million. No player is called to opt out. This is largely because the model underpredicts stars, so the opt-out calls mean "the model sees no reason to leave".
+
 ## 9. Limitations
 
 - **Selection bias:** Only players who reached free agency appear in training data, and they skew toward good performers.
@@ -242,6 +255,7 @@ Notes:
 - **Benchmark scope:** The comparison to MLB Trade Rumors covers only players in their top 50 with an MLB track record and a market contract of at least $5 million, which is the top of the market where the model is weakest. Some model design choices (a year trend, removing qualifying-offer acceptances) were made while looking at the same 2024-2026 results used for the comparison, so the reported accuracy is probably optimistic.
 - **Gaps in the source contract table:** The Spotrac tables are not complete. An audit found 21 rows with no contract value (5 in 2023, 15 in 2024, 1 in 2026, none in the other nine classes), which were removed as minor league or non-guaranteed deals. At least one of them was a real major league contract listed at $0 in the source (Jason Heyward, 2024, one year and $9 million), and a player on MLB Trade Rumors' 2024 list (Brandon Belt) does not appear in the 2024 table at all. The effect on the model is likely small, since the affected classes are mostly test years, but it has not been quantified.
 - **Guaranteed years only:** Contract length comes from the source table's guaranteed years and does not capture opt-outs, club or player options, or deferred money, so a four-year deal with opt-outs counts as four years. Total value is predicted AAV times predicted years, so errors in both compound, especially for the largest contracts.
+- **Option calls:** Calls compare a one-year option salary with a projected AAV for multi-year deals, so they are approximate, and more than half of the options are toss-ups at the model's own error margin. Option terms come from MLB Trade Rumors' list and may change: Nick Pivetta's option type needs verification, Gary Sanchez's terms are not listed, and Aroldis Chapman's option is treated as guaranteed because its innings condition was met. Real decisions also weigh health, payroll, and roster fit, which the model cannot see.
 
 ## 10. Future Work
 
@@ -330,6 +344,7 @@ Run order:
 | 2026-10-25 | Parsed option and opt-out terms for the 2027 class from MLBTR's notes (fa_2027_options.csv): 62 players with predictions (25 club options, 25 mutual, 4 player, 8 opt-outs); checked about 17 rows against the source text; 3 flagged for manual review (Chapman: guaranteed once innings condition met; Freeland: vests only with 170 innings in 2026; Sanchez: no terms listed) and 1 type conflict to verify (Pivetta: club option in the current file, player option in an April copy of the list) | Option calls depend on correct terms; the parser was spot-checked against the source and conflicts are flagged instead of guessed |
 | 2026-10-25 | Decided to keep model outputs mechanical and handle outliers separately: Tarik Skubal's model projection ($32.2M AAV) is labeled a lower bound and will be shown next to a reference range from precedent contracts in the data and MLBTR's own published prediction; a calibration correction for star players will be tested on out-of-sample years before being applied to anyone | A hand-edited number for one player would mean applying a different standard to him than to everyone else; no past contract resembles what he is expected to receive|
 | 2026-10-25 | Looked up precedent for Tarik Skubal's projection in the contracts data: closest comparable by age and weighted WAR is Gerrit Cole (2020, 9 years, $324M); top pitcher AAVs excluding Ohtani are $34M-$43.3M; Skubal's model AAV ($32.2M) sits below most of them and the model's 5-year length is below the 7-9 years of the longest deals for pitchers in their early thirties | Shows how far below precedent the model's output is without editing it; reference figures are nominal and labeled as non-model |
+| 2026-10-25 | Generated option and opt-out calls for 61 players (fa_2027_option_calls.csv): 35 of 61 are toss-ups at a $4M margin (25 at $2.5M, 47 at $6M); clearest calls are Acuña (club exercises), Alcantara and Robert (club declines), Severino (player exercises); no player is called to opt out; fixed the mutual-option label for options with no buyout | The margin reflects the model's uncertainty, so a large share of toss-ups is a result in itself; opt-out calls lean toward "stays" because the model underpredicts stars |
 
 ## Appendix B: Data Dictionary
 
