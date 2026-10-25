@@ -178,13 +178,53 @@ Errors were checked by weighted WAR band using the WAR-only hitter model, retrai
 
 The model is well calibrated in the middle of the market but underpredicts stars. In the 2025 and 2026 classes the gap for 3.5+ WAR hitters was about -$9.9M (8 contracts), so the sample at the top is small. Predictions for the highest-value players in the 2027 class should be read as lower bounds. A squared WAR term was tested to capture a star premium and did not help (see Appendix A), so the linear model is kept and the underprediction is reported as a limitation.
 
+### 7.5 Contract length and total value
+
+Contract length (guaranteed years, capped at 8) was modeled with a ridge regression on the same inputs as AAV (three-season weighted bWAR, age, age squared, qualifying offer status, a year trend, and position). For each test class from 2021 to 2026 the model trained only on earlier classes (433 contracts of $5 million or more). Total value is predicted AAV times predicted years.
+
+| Actual contract size | Contracts | Actual years | Predicted years | Model MAE | Naive MAE |
+|---|---|---|---|---|---|
+| Under $10M AAV | 231 | 1.44 | 1.64 | 0.59 | 0.69 |
+| $10M-$20M | 144 | 2.19 | 2.08 | 0.80 | 0.92 |
+| Over $20M | 58 | 4.55 | 3.70 | 1.76 | 2.69 |
+| All | 433 | | | 0.81 | 1.03 |
+
+The naive model guesses the median training length (two years). The model's average error is about 21% lower than the naive guess, mostly from large contracts. It is within one year of the actual length 71% of the time, compared with 87% for the naive guess, so for typical short deals a flat two-year guess is almost as good. Large contracts are compressed, as with AAV: the model predicts 3.7 years where the average over-$20M deal ran 4.55. Deals worth $20 million a year or more were also shorter in 2024-2026 (about 4.0 years on average) than in 2015-2023 (about 5.3).
+
+Compared with MLB Trade Rumors on the same 120 players in the 2024-2026 benchmark:
+
+| Group | Players | Years MAE (MLBTR / model) | Total value MAE (MLBTR / model) | Total value bias (MLBTR / model) |
+|---|---|---|---|---|
+| All scored | 120 | 0.9 / 1.0 | $19.9M / $24.8M | +$7.6M / -$10.9M |
+| $20M+ AAV | 35 | 1.7 / 1.7 | $42.2M / $57.1M | +$12.6M / -$40.6M |
+
+The model's contract length is close to MLBTR's, but its total value is further behind because errors in AAV and years compound for the largest contracts, where both run low. MLBTR's totals tended to run high because it projected longer deals than players signed. Total value predictions for the highest-value players should be read as lower bounds.
+
 ## 8. 2027 Free Agent Projections
 
-[Table: player, position, age, projected AAV, projected years, projected total, uncertainty range, MLBTR prediction for comparison.]
+Preliminary projections for 253 of the 257 players on MLB Trade Rumors' projected 2026-27 free agent list (as of October 19, 2026); four had no 2024-2026 MLB season in the data. AAV projections were generated October 19, 2026, and contract length and total value on October 25, 2026 (total is AAV times whole predicted years). Full results are in `outputs/fa_2027_contract_projections.csv`, with a range of plus or minus one year on length. A comparison with MLBTR's own 2027 predictions will be added when they publish their Top 50 after the World Series.
+
+| Player | Pos | Age | AAV | Years | Total | Note |
+|---|---|---|---|---|---|---|
+| Tarik Skubal | SP | 30.0 | $32.2M | 5 | $161M | Outlier; lower bound |
+| Seiya Suzuki | RF | 32.3 | $24.0M | 3 | $72M | |
+| Drew Rasmussen | SP | 31.3 | $22.9M | 3 | $69M | $20MM club option |
+| Randy Arozarena | LF | 31.8 | $21.3M | 3 | $64M | |
+| Ronald Acuña Jr. | RF | 29.0 | $20.8M | 3 | $62M | $17MM club option |
+| Freddy Peralta | SP | 30.5 | $19.3M | 3 | $58M | |
+| Ian Happ | LF | 32.3 | $19.2M | 3 | $58M | |
+| Michael King | SP | 31.5 | $19.1M | 3 | $57M | Opt-out |
+| Trevor Rogers | SP | 29.0 | $18.2M | 3 | $55M | |
+| Ryan Jeffers | C | 29.5 | $18.1M | 3 | $54M | |
 
 Notes:
-- The free agent list is as of [date]. Option decisions, extensions, and retirements will change it.
+- The free agent list is projected. Option decisions, extensions, and retirements will change it, and it will be refreshed after the season.
 - Projections are model outputs, not predictions of what any specific team will do.
+- Tarik Skubal is flagged as an outlier: no past contract resembles what he is expected to receive, so his projection is likely far too low.
+- Players with club, mutual, or player options (for example Ronald Acuña Jr. and Drew Rasmussen) may never reach free agency, so their rows are not forecasts of a market contract.
+- The length model predicts one year for 156 of 253 players, two years for 81, three for 15, and five for one (Skubal). It produces no four-year deals, so long contracts for the top of the class are not captured, and total values for the largest contracts should be read as lower bounds.
+- Predictions under $5 million only mean "a small deal", since the models were trained on contracts of $5 million or more.
+- Qualifying offers are not yet known and are set to zero for all players, so players likely to receive one may be projected slightly low.
 
 ## 9. Limitations
 
@@ -201,6 +241,7 @@ Notes:
 - **Qualifying offers:** Players who accept a qualifying offer take a formula-set one-year price instead of a market contract, so their market value is unobserved. They are excluded from training, which may remove some below-market cases.
 - **Benchmark scope:** The comparison to MLB Trade Rumors covers only players in their top 50 with an MLB track record and a market contract of at least $5 million, which is the top of the market where the model is weakest. Some model design choices (a year trend, removing qualifying-offer acceptances) were made while looking at the same 2024-2026 results used for the comparison, so the reported accuracy is probably optimistic.
 - **Gaps in the source contract table:** The Spotrac tables are not complete. An audit found 21 rows with no contract value (5 in 2023, 15 in 2024, 1 in 2026, none in the other nine classes), which were removed as minor league or non-guaranteed deals. At least one of them was a real major league contract listed at $0 in the source (Jason Heyward, 2024, one year and $9 million), and a player on MLB Trade Rumors' 2024 list (Brandon Belt) does not appear in the 2024 table at all. The effect on the model is likely small, since the affected classes are mostly test years, but it has not been quantified.
+- **Guaranteed years only:** Contract length comes from the source table's guaranteed years and does not capture opt-outs, club or player options, or deferred money, so a four-year deal with opt-outs counts as four years. Total value is predicted AAV times predicted years, so errors in both compound, especially for the largest contracts.
 
 ## 10. Future Work
 
@@ -283,6 +324,9 @@ Run order:
 | 2026-10-21 | Benchmarked out-of-sample AAV predictions against MLBTR's Top 50 predictions for 2024-2026 (120 players scored): pooled MAE $3.15M for MLBTR vs $4.13M for the model; MLBTR closer in every class; both underpredict recent classes and the model's bias grew from -$1.71M to -$3.48M | The model is behind the expert benchmark, mostly at the top of the market; contract length is not modeled, which likely contributes in recent classes when deals got shorter; the model's design choices were made while looking at the same test years, so true out-of-sample performance is probably no better than shown |
 | 2026-10-21 | Broke the MLBTR benchmark down by contract size: model and MLBTR within about $0.3M MAE below $20M AAV, but $8.16M vs $5.02M MAE for the 30 contracts of $20M or more (about 80% of the model's extra error). Of 30 unscored MLBTR players: 13 international or Ohtani, 6 qualifying-offer acceptances, 8 under $5M, 2 missing from the source table (Heyward, listed at $0; Belt, absent), 1 name-spelling mismatch (Jakob vs. Jake Junis) | The model is competitive for most of the market and weakest for stars; the unscored players are mostly expected exclusions, and an audit of the source table found a few real contracts missing |
 | 2026-10-21 | Audited the $0-value rows removed during cleaning: 21 across 12 classes (5 in 2023, 15 in 2024, 1 in 2026, none elsewhere); confirmed Jason Heyward's 2024 deal ($9M, one year) was among them; kept the rule and documented the gap instead of rebuilding the pipeline | The affected rows are few and mostly in test years; rebuilding for one confirmed contract would not change the results materially, but a corrections file will be added if more real $5M+ deals are found |
+| 2026-10-21 | Examined contract length in the $5M+ training contracts (756): 40% one-year, 33% two-year, about 86% three years or fewer; average length falls with age (4.5 years under 28 to 1.3 at 36+) and rises with size (1.6 years under $10M AAV, 5.1 at $20M+); share of one-year deals rose from about 27% in 2015-16 to 47-54% in 2024-26 | Length is skewed and tied to AAV, so a straight-line model will miss long deals; plan to predict years from the same inputs as AAV, evaluate against MLBTR's years and total-value errors on the same players, and derive total value as predicted AAV times predicted years |
+| 2026-10-22 | Modeled contract length with the same inputs as AAV and evaluated on rolling 2021-2026 classes (433 contracts): MAE 0.81 years vs 1.03 for a flat two-year guess, but within one year of actual only 71% of the time vs 87%; large contracts compressed (3.70 predicted vs 4.55 actual years for $20M+ deals); $20M+ deals averaged about 4.0 years in 2024-2026 vs about 5.3 in 2015-2023; against MLBTR on 120 players the model ties on years for $20M+ deals (1.7 vs 1.7) but trails on total value ($24.8M vs $19.9M MAE) | Length improves on a naive guess mainly for large contracts; total value compounds AAV and length errors, so star totals are lower bounds |
+| 2026-10-25 | Generated 2027 contract length and total value projections (fa_2027_contract_projections.csv): final length model trained on all classes, predicted years rounded to whole years with a range of plus or minus one, total value = AAV x years. Verified that $20M+ deals averaged 5.34 years in 2015-2023 (58 deals) vs 3.97 in 2024-2026 (35). Predicted lengths: 156 one-year, 81 two-year, 15 three-year, 1 five-year | The model reproduces the common short deals but not the long tail of star contracts; top reliever projections ($44M-$49M over three years) are in line with 2026 relievers such as Robert Suarez (3 years, $45MM) and Devin Williams (3 years, $51MM) |
 
 ## Appendix B: Data Dictionary
 
