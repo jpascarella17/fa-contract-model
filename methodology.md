@@ -1,11 +1,11 @@
 # Projecting MLB Free Agent Contracts with Statcast and Traditional Statistics
 
-**Author:** [Your name]
-**Contact:** [Email / LinkedIn]
-**Status:** Work in progress. Last updated [date]
-**Repository:** [link]
+**Author:** Joseph Pascarella
+**Contact:** josephpascarella17@gmail.com / www.linkedin.com/in/
+joseph-pascarella-aa58463a8
 
-> Items in `[brackets]` are placeholders to fill in as the project progresses. Delete this note when finished.
+**Status:** Work in progress. Last updated 10-26-2026
+**Repository:** [link]
 
 ---
 
