@@ -55,8 +55,6 @@ Contracts were copied from Spotrac's free agent table for each class and saved a
 
 ### 4.3 Dataset summary
 
-### 4.3 Dataset summary
-
 | Class | Hitters | Pitchers | Total | Median AAV, hitters ($M) | Median AAV, pitchers ($M) |
 |---:|---:|---:|---:|---:|---:|
 | 2015 | 45 | 56 | 101 | 4.00 | 4.00 |
