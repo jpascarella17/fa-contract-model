@@ -1,8 +1,7 @@
 # Projecting MLB Free Agent Contracts with Statcast and Traditional Statistics
 
 **Author:** Joseph Pascarella
-**Contact:** josephpascarella17@gmail.com / www.linkedin.com/in/
-joseph-pascarella-aa58463a8
+**Contact:** josephpascarella17@gmail.com / www.linkedin.com/in/joseph-pascarella-aa58463a8
 
 **Status:** Work in progress. Last updated 10-26-2026
 **Repository:** [link]
@@ -11,107 +10,140 @@ joseph-pascarella-aa58463a8
 
 ## 1. Abstract
 
-[Write this last. 4 to 6 sentences covering: the problem, the approach, the headline result versus the baseline, and the main limitation.]
-
-Draft structure:
-- Teams value free agents by projecting future performance, then pricing it.
-- This project builds a two-stage model: (1) forecast future WAR from underlying skill metrics and age, (2) convert projected value into contract terms.
-- Result: [model error versus baseline and versus public projections].
-- Key finding: [what Statcast features added beyond traditional stats, if anything].
+Teams price free agents by projecting future performance and converting it into dollars, but the public record of how well simple models do this is thin. This project builds ridge regression models, fit separately for hitters and pitchers, that predict a free agent's average annual value (AAV) and contract length from three seasons of weighted Baseball Reference WAR, age, position, and qualifying offer status. They are trained on 1,600 contracts from the 2015 to 2026 free agent classes. On the 2024 to 2026 classes, which the models never trained on, the baseline's average AAV miss was $3.53M against $5.62M for guessing the median contract. Adding Baseball Savant percentile ranks improved pitcher error in all six years of a rolling check ($3.46M to $3.28M) but helped hitters in only three of six ($3.93M to $3.67M). Against MLB Trade Rumors' published Top 50 predictions, the model is behind (AAV miss of $4.13M vs $3.15M on 120 players), and the gap is concentrated in contracts of $20M a year or more. The main limitation is the top of the market: the model compresses star contracts, so its projections for the highest-value players, including Tarik Skubal, should be read as lower bounds. The models are applied to the 2027 free agent class, with exercise or decline calls for the 61 players holding options or opt-outs.
 
 ## 2. Motivation and Research Questions
 
-Free agent contracts are among the largest financial decisions a club makes. Public projections exist, but it is less clear how much underlying-skill data (batted ball quality, pitch shape, plate discipline, bat speed) improves them over traditional stats.
+Free agent contracts are among the largest financial decisions a club makes. Public projections exist, but it is less clear how much underlying-skill data (batted ball quality, plate discipline, velocity, strikeout and walk rates) improves them over traditional stats.
 
 Research questions:
-1. How well can a player's next-contract value be predicted from pre-free-agency performance, age, and position?
-2. Do Statcast and pitch-shape features improve predictions over a baseline built on WAR and age alone?
-3. How do model-implied values compare with what the market actually paid, and where are the largest gaps?
+1. How well can a player's next contract (average annual value and length) be predicted from pre-free-agency performance, age, and position? *Answer: better than a naive guess, with an average AAV miss of $3.53M against $5.62M (Section 7.1), but with large misses at the top of the market (Section 7.4).*
+2. Do Baseball Savant percentile features improve predictions over a baseline built on WAR and age alone? *Answer: a little. Pitcher error fell in all six years tested; hitter error fell in three of six (Section 7.2).*
+3. How do model predictions compare with what the market paid, and with published expert predictions? *Answer: the model trails MLB Trade Rumors' Top 50 predictions, mostly on contracts of $20M a year or more (Section 7.3).*
+
+Bat speed and pitch-shape data were considered but are not used in the current models; see Section 9.
 
 ## 3. Scope and Definitions
 
-- **Free agent class:** Players who sign a major league contract in the offseason following season *N* are labeled the class of *N*+1 [confirm convention]. This project's target is the **2027 offseason**, meaning players who become free agents after the 2026 season.
-- **Contract value:** Average annual value (AAV) and total guaranteed dollars. Years are modeled separately.
-- **Included:** Major league free agent contracts for hitters and pitchers.
-- **Excluded or handled separately:** Minor league deals, extensions signed before free agency, international signings from Japan/Korea [decide], and outliers such as Shohei Ohtani (see Section 9).
+- **Free agent class:** Contracts are grouped by signing year. A player who signs in the offseason after season *N* belongs to the class of *N*+1, and his stats come from season *N*. This project's target is the **2027 class**: players who become free agents after the 2026 season, projected from their 2024 to 2026 seasons.
+- **Contract value:** Average annual value (AAV), contract length in guaranteed years, and total value (AAV times years). AAV and years are predicted by separate models, fit separately for hitters and pitchers.
+- **Included:** Major league free agent contracts from the 2015 to 2026 classes (Spotrac), with a prior-season stat record. After cleaning this is 1,600 contracts.
+- **Excluded:** Rows with no contract value (21 rows), one-year qualifying offer acceptances (18 contracts) because their salaries are set by formula rather than negotiated, players signing from Japan or Korea with no major league record, and Shohei Ohtani's 2023 contract as an outlier. Minor league deals are not included.
+- **Handled separately:** Option and opt-out decisions for 2027 players are scored with a separate set of rules (Section 8). Outliers such as Tarik Skubal are shown next to precedent contracts instead of being adjusted (Section 8).
+- **Not modeled:** Contract structure (deferrals, opt-outs, incentives) and club-specific context.
 
 ## 4. Data
 
 | Source | What it provides | Access |
 |---|---|---|
-| Baseball Savant / Statcast | Exit velocity, barrel rate, xwOBA, sprint speed, pitch movement, spin, release point, bat speed (2023 onward) | `pybaseball` |
-| FanGraphs | WAR, plate discipline, Stuff+/Location+/Pitching+, projections | `pybaseball` / exports |
-| Spotrac, Cot's Contracts, MLB Trade Rumors | Contract terms, free agent lists, public predictions | [scraping / manual export] |
+| Spotrac | Free agent contracts, 2015 to 2026 classes: player, position, years, total value, qualifying offer flag | Tables copied by hand into CSV |
+| Baseball Reference (bWAR) | Season WAR for hitters and pitchers | `pybaseball` (`bwar_bat`, `bwar_pitch`) |
+| Baseball Savant | Percentile ranks: xwOBA, barrel rate, exit velocity, chase, whiff, walk and strikeout rates, sprint speed, fastball velocity, xERA, hard-hit rate | `pybaseball` (`statcast_batter_percentile_ranks`, `statcast_pitcher_percentile_ranks`) |
+| MLB Stats API | Birth dates, used to compute age at signing | Requests by MLBAM player ID |
+| MLB Trade Rumors | The 2026-27 free agent list, option and opt-out terms, and annual Top 50 predictions (2024 to 2026) used as a benchmark | Article text saved by hand |
 
 ### 4.1 Data collection
-[Describe how you pulled each source, date ranges, and how you handled rate limits and caching.]
+
+Contracts were copied from Spotrac's free agent table for each class and saved as one CSV per year. The tables have inconsistent headers (some years include running totals in the value column), so `src/clean_contracts.py` matches columns by prefix. WAR comes from Baseball Reference through `pybaseball` because the FanGraphs request returned an access error. Savant percentile ranks and ages were pulled by MLBAM player ID. The MLB Trade Rumors free agent list and Top 50 articles were saved as text and parsed with regular expressions, since their heading format changed between years. Raw article text is excluded from the repository.
 
 ### 4.2 Data cleaning
-[Name matching across sources (player IDs, e.g. MLBAM/FanGraphs crosswalk), handling of mid-season trades, partial seasons, players with multiple positions.]
+
+- **Contracts:** dollar signs and commas removed; rows with no contract value or no years dropped; AAV recomputed as total value divided by years; the first listed position kept for players with several; when a player appears twice in a class, the larger contract is kept.
+- **Qualifying offers:** flagged from the Spotrac label. The 18 one-year acceptances were removed from model training because their salaries are set by formula.
+- **Name matching:** names were normalized (accents removed, lowercase, hyphens replaced with spaces, suffixes like Jr. and III dropped) and matched to WAR and Savant tables, with two manual aliases (Michael Fiers to Mike Fiers, Steven Pearce to Steve Pearce). A few players remain unmatched (see Section 9).
+- **Timing:** a contract signed in year *N* uses stats from season *N*−1 and the two seasons before it. Missing seasons count as zero WAR for players with an MLB ID. Savant features use the same 5-4-3 weights over the seasons available, and missing values are filled with the median percentile (50).
 
 ### 4.3 Dataset summary
-[Table: number of free agent contracts per year, split by hitters and pitchers, AAV distribution.]
+
+### 4.3 Dataset summary
+
+| Class | Hitters | Pitchers | Total | Median AAV, hitters ($M) | Median AAV, pitchers ($M) |
+|---:|---:|---:|---:|---:|---:|
+| 2015 | 45 | 56 | 101 | 4.00 | 4.00 |
+| 2016 | 60 | 76 | 136 | 3.00 | 3.25 |
+| 2017 | 47 | 53 | 100 | 5.75 | 5.35 |
+| 2018 | 39 | 62 | 101 | 4.00 | 4.38 |
+| 2019 | 48 | 62 | 110 | 4.00 | 3.38 |
+| 2020 | 60 | 71 | 131 | 4.00 | 3.25 |
+| 2021 | 64 | 90 | 154 | 3.05 | 2.53 |
+| 2022 | 62 | 88 | 150 | 4.75 | 5.00 |
+| 2023 | 70 | 76 | 146 | 6.00 | 6.88 |
+| 2024 | 56 | 91 | 147 | 3.60 | 4.75 |
+| 2025 | 69 | 102 | 171 | 4.00 | 3.75 |
+| 2026 | 56 | 97 | 153 | 5.38 | 4.00 |
+| **All** | **676** | **924** | **1,600** | | |
+
+Most contracts are small: median AAV in every class is under $7M, and the large deals that matter most to a team are a small share of the sample. That is why the models have few examples at the top of the market (Section 7.4). Pitchers make up 58% of contracts.
 
 ## 5. Methodology
 
 ### 5.1 Overview
-The model has two stages.
 
-**Stage 1: Value projection.** Estimate each player's expected WAR over the contract window using recent performance, underlying skill metrics, and an aging adjustment.
-
-**Stage 2: Market conversion.** Map projected value, age, position, and market context to AAV and contract length.
+The model predicts contract terms directly from a player's recent record. It does not forecast future WAR first. Separate ridge regression models, fit for hitters and for pitchers, predict (1) average annual value (AAV) and (2) contract length in years. Projected total value is predicted AAV times predicted years, rounded to whole years.
 
 ### 5.2 Baseline model
-The baseline uses only traditional inputs: weighted average WAR over the last three seasons, age, and position. Every later model is judged against it.
 
-**Model:** Ridge regression (regularized linear regression)
+The baseline uses only traditional inputs. Every later model is judged against it.
+
+**Model:** Ridge regression (regularized linear regression), with the penalty chosen by cross-validation (`RidgeCV`, 30 values from 0.01 to 1,000) after standardizing the inputs.
 
 **Inputs:**
-- 3-season weighted bWAR (weights 5-4-3, most recent season counts most)
-- Age at signing, plus age squared to capture the aging curve
+- 3-season weighted bWAR, `(5 × most recent + 4 × second + 3 × third) / 12`, with missing seasons counted as zero for players with an MLB ID
+- Age at signing, plus (age − 31)² to capture the aging curve
 - Position
 - Qualifying offer status
+- Class year (signing year − 2015), added after the first version underpredicted recent contracts (Section 7.1)
 
 **Data split:**
-- Train: 2015-2023 classes
-- Test: 2024-2026 classes
+- Train: 2015 to 2023 classes
+- Test: 2024 to 2026 classes
+- Final models are retrained on all years before the 2027 projections
 - Shohei Ohtani is excluded because his deferred contract and two-way role make him an outlier
 
 **Results:** See Section 7.1.
 
-### 5.3 Feature engineering
+### 5.3 Savant features
 
-**Hitters:** [xwOBA, barrel rate, hard-hit rate, chase rate, whiff rate, sprint speed, bat speed and swing length where available, defensive value, plate appearances]
+Baseball Savant percentile ranks are added to the baseline and the two versions are compared (Section 7.2).
 
-**Pitchers:** [Stuff+, fastball velocity, pitch movement and spin, release point consistency, strikeout and walk rates, innings pitched, injury history]
+**Hitters:** xwOBA, barrel rate, exit velocity, chase rate, whiff rate, walk rate, sprint speed
 
-**Contextual:** [age at signing, position, qualifying offer, free agent class year, injury days]
+**Pitchers:** xERA, fastball velocity, strikeout rate, walk rate, whiff rate, chase rate, hard-hit rate
 
-Decisions to document:
-- How seasons are weighted (recency weighting, regression to the mean for small samples).
-- How missing data is handled, especially bat speed for years before 2023.
-- How features were selected and why.
+Savant features use the same 5-4-3 weights over the seasons available, and missing values are filled with 50 (the median percentile). Percentile ranks were chosen over raw values because they are comparable across seasons. Bat speed and pitch-shape data were considered but not used; see Section 9.
 
-### 5.4 Aging curves
-[Describe the approach: delta method, positional adjustment, comparison to published curves.]
+### 5.4 Aging
+
+Aging is handled with the age and (age − 31)² terms rather than a separate aging-curve study. This lets the model reward prime-age players and discount older ones, but it cannot learn position-specific aging.
 
 ### 5.5 Models compared
-1. Baseline linear regression
-2. Regularized regression (ridge / elastic net)
-3. Gradient boosting (e.g. XGBoost / LightGBM)
-4. [Any additional model]
 
-Because the number of contracts is limited, simpler regularized models are expected to compete with more complex ones. [Report whether that held up.]
+1. Baseline ridge regression (WAR, age, position, qualifying offer)
+2. Baseline plus class year
+3. Baseline plus Savant percentile features
+4. A naive benchmark (the median contract), plus MLB Trade Rumors' published predictions for 2024 to 2026 (Section 7.3)
+
+Tested and rejected: a log-transformed target, squared WAR terms, and a peak-WAR input. None improved on the simple model by a meaningful margin. A gradient boosting model was not tested, since the sample is small (1,600 contracts, with few at the top of the market) and the regularized linear model was expected to compete with it.
+
+Validation used two checks: a single split (train on 2015 to 2023, test on 2024 to 2026) and a rolling-year check that trains on all earlier classes and tests each of 2021 to 2026 in turn.
 
 ### 5.6 Uncertainty
-[Describe how prediction intervals are produced: quantile regression, bootstrapping, or residual-based intervals.]
+
+Accuracy is reported as average miss (MAE) on classes the model never saw: about $3.5M of AAV overall, and larger for big contracts (Section 7.4). The 2027 projections carry two kinds of caution:
+
+- **Years range:** each projection lists a low and high contract length, one year either side of the prediction (`years_low`, `years_high`). This matches the length model's error: its average miss is 0.81 years, and 71% of predictions fell within one year (Section 7.5).
+- **Lower-bound flag:** projections of about $20M a year or more are flagged as lower bounds (`lower_bound`), because the model underpredicts stars. Read these as floors, not midpoints.
+
+Option and opt-out calls use a $4M margin, about the model's AAV error, and treat anything closer as a toss-up (Section 8). No formal prediction intervals (quantile regression or bootstrapping) were fit.
 
 ## 6. Validation
 
-- **Split:** Train on classes [2015 to 2023]. Test on [2024 through 2026]. No future data is used in any training step.
-- **Metrics:** MAE and RMSE for AAV and total value; interval coverage.
-- **External benchmark:** MLB Trade Rumors' predicted contracts for the same classes.
-- **Dollar adjustment:** [Describe how contract values were adjusted for market inflation across years.]
+- **Split:** Train on the 2015 to 2023 classes and test on 2024 to 2026. A rolling-year check trains on all earlier classes and tests each of 2021 to 2026 in turn, so every test class is predicted only from earlier ones. The final models used for the 2027 projections are retrained on all years.
+- **Metrics:** Mean absolute error (MAE) of AAV in $M, also broken out by contract size and by WAR band. Contract length is scored by MAE in years and by the share of predictions within one year. Total value is scored by MAE in $M. RMSE and interval coverage are not reported, because no formal prediction intervals were fit (Section 5.6).
+- **Naive benchmark:** Guessing the median contract for every player.
+- **External benchmark:** MLB Trade Rumors' published Top 50 predictions for the 2024 to 2026 classes (120 players matched and scored).
+- **Market inflation:** Contract values were not converted to constant dollars. A class-year term in the model lets average prices rise over time, which removed the underprediction of recent contracts (Section 7.1).
+- **Caveat:** Some modeling choices, including the year trend and which variants to keep, were made while looking at the same 2024 to 2026 results used for grading, so the reported accuracy is probably somewhat optimistic. The cleanest test is how the 2027 projections compare with the contracts actually signed.
 
 ## 7. Results
 
@@ -242,54 +274,63 @@ The clearest calls are the club exercising Ronald Acuña Jr.'s option (net cost 
 ## 9. Limitations
 
 - **Selection bias:** Only players who reached free agency appear in training data, and they skew toward good performers.
-- **Small sample:** Few contracts at the top of the market, so extreme values are poorly estimated.
-- **New metrics have short histories:** Bat speed has been public only since 2023, which limits how much weight it can carry.
+- **Small sample at the top:** Few contracts are at the top of the market, so extreme values are poorly estimated. The models underpredict stars on both AAV and contract length, so projections for the largest contracts should be read as lower bounds.
+- **Newer metrics not used:** Bat speed and pitch-shape data have short public histories, so they were left out and Savant percentile ranks were used instead. Whether they add anything beyond percentile ranks is untested (Section 10).
 - **Unobserved factors:** Team payroll situation, clubhouse and makeup considerations, medical information, and agent dynamics are not captured.
 - **Context a stats-only model can't see:** Teams pay for track record, postseason performance, and injury recoveries. For example, Walker Buehler's 2025 contract ($21M AAV) followed a season of negative WAR, but came after strong earlier seasons and a postseason run, so the model underpredicted it. Ronald Acuña Jr. (a former MVP) is a similar case in the 2027 class: he had 222, 412, and 469 plate appearances in 2024 to 2026, so his weighted WAR reflects reduced playing time and lower production than his 2023 season (8.4 WAR), which falls outside the model's three-season window. Notes like these are kept in a separate column of the predictions file instead of adjusting any model output.
 - **Outliers:** Shohei Ohtani is excluded from training and evaluation. His contract is mostly deferred, so the headline AAV overstates what the team pays today, and his two-way role does not fit a single hitter or pitcher WAR.
 - **International signees:** Players coming from Japan, Korea, or Cuba with no prior MLB season have no bWAR, so they are left out of the model.
 - **Short 2020 season:** WAR from 2020 covers only 60 games and is not rescaled, which affects the 2021 to 2023 classes that look back at it.
-- **Name matching:** Contracts are joined to stats by player name. Five contracts where one name matched two different players (Chris Young, Luis Garcia) were excluded rather than guessed.
+- **Name matching:** Contracts are joined to stats by player name. Five contracts where one name matched two different players (Chris Young, Luis Garcia) were excluded rather than guessed. Four players on the 2027 list (Kiké Hernandez, Kyle Wright, Trevor Stephan, Rowan Wick) had no MLB ID match and are not projected, and Jakob Junis is left unscored in the benchmark because of a first-name spelling mismatch (Jake vs Jakob).
 - **Market change:** Spending patterns shift over time. The baseline underpredicts every class from 2022 on, and the gap widens in the test years, so a year adjustment is tested in Section 7. The collective bargaining agreement also expires after the 2026 season, which could change the 2027 market in ways past data cannot show.
-- **Qualifying offers:** Players who accept a qualifying offer take a formula-set one-year price instead of a market contract, so their market value is unobserved. They are excluded from training, which may remove some below-market cases.
+- **Qualifying offers:** Players who accept a qualifying offer take a formula-set one-year price instead of a market contract, so their market value is unobserved. They are excluded from training, which may remove some below-market cases. For the 2027 class, qualifying offers are not yet known and are set to zero.
 - **Benchmark scope:** The comparison to MLB Trade Rumors covers only players in their top 50 with an MLB track record and a market contract of at least $5 million, which is the top of the market where the model is weakest. Some model design choices (a year trend, removing qualifying-offer acceptances) were made while looking at the same 2024-2026 results used for the comparison, so the reported accuracy is probably optimistic.
 - **Gaps in the source contract table:** The Spotrac tables are not complete. An audit found 21 rows with no contract value (5 in 2023, 15 in 2024, 1 in 2026, none in the other nine classes), which were removed as minor league or non-guaranteed deals. At least one of them was a real major league contract listed at $0 in the source (Jason Heyward, 2024, one year and $9 million), and a player on MLB Trade Rumors' 2024 list (Brandon Belt) does not appear in the 2024 table at all. The effect on the model is likely small, since the affected classes are mostly test years, but it has not been quantified.
 - **Guaranteed years only:** Contract length comes from the source table's guaranteed years and does not capture opt-outs, club or player options, or deferred money, so a four-year deal with opt-outs counts as four years. Total value is predicted AAV times predicted years, so errors in both compound, especially for the largest contracts.
-- **Option calls:** Calls compare a one-year option salary with a projected AAV for multi-year deals, so they are approximate, and more than half of the options are toss-ups at the model's own error margin. Option terms come from MLB Trade Rumors' list and may change: Nick Pivetta's option type needs verification, Gary Sanchez's terms are not listed, and Aroldis Chapman's option is treated as guaranteed because its innings condition was met. Real decisions also weigh health, payroll, and roster fit, which the model cannot see.
+- **Option calls:** Calls compare a one-year option salary with a projected AAV for multi-year deals, so they are approximate, and more than half of the options are toss-ups at the model's own error margin. Option terms come from MLB Trade Rumors' list and may change: Gary Sanchez's terms are not listed, and Aroldis Chapman's option is treated as guaranteed because its innings condition was met. Real decisions also weigh health, payroll, and roster fit, which the model cannot see.
 
 ## 10. Future Work
 
-- Add team-level context (payroll, competitive window, positional need).
-- Model contract structure (opt-outs, deferrals, incentives) rather than only AAV and years.
-- Extend to arbitration-eligible players and extensions.
-- [Your ideas]
+- **Score the 2027 projections against actual signings** as deals are announced, alongside MLB Trade Rumors' 2027 Top 50 (published after the World Series). This is a live test that was not tuned to the results.
+- **Refresh after the World Series:** qualifying offers, option and opt-out decisions, and extensions will change the free agent list and the projections.
+- **Fix the top of the market.** The models underpredict stars and compress contract length. Options to test: a separate model for contracts of $15M a year or more, an age-by-value interaction in the length model, and gradient boosting.
+- **Add bat speed and pitch-shape data** (swing speed, pitch movement, and release point) to test whether they add anything beyond Savant percentile ranks.
+- **Add injury history and workload,** which the models cannot see.
+- **Add team-level context** (payroll, competitive window, positional need).
+- **Model contract structure** (opt-outs, deferrals, incentives) rather than only AAV and years.
+- **Cover international signees** from Japan and Korea, who are currently excluded because they have no MLB record.
+- **Extend to arbitration-eligible players and extensions.**
+- **Improve data quality:** fill the gaps in the Spotrac contract tables and resolve the four players with no MLB ID match.
 
 ## 11. Reproducing This Work
 
 ```bash
-git clone [repo-url]
-cd [repo-name]
+git clone https://github.com/jpascarella17/fa-contract-model.git
+cd fa-contract-model
 python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
+.venv\Scripts\activate        # Mac/Linux: source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+The processed data files in `data/processed/` are included, so the models and projections can be re-run without repeating the manual data collection. Two inputs were collected by hand and are not scripted:
+
+- **Contracts:** Spotrac free agent tables for each class (2015 to 2026), copied into CSV files and cleaned by `src/clean_contracts.py`.
+- **MLB Trade Rumors:** the projected 2026-27 free agent list and the 2024 to 2026 Top 50 predictions, saved as text in `data/raw/` (not included in the repository).
+
 Run order:
-1. `notebooks/01_data_collection.ipynb`
-2. `notebooks/02_cleaning.ipynb`
-3. `notebooks/03_baseline.ipynb`
-4. `notebooks/04_feature_models.ipynb`
-5. `notebooks/05_validation.ipynb`
-6. `notebooks/06_2027_projections.ipynb`
+1. `notebooks/01_contracts_check.ipynb`: loads and checks the cleaned contract tables
+2. `notebooks/02_pull_stats.ipynb`: pulls WAR, Savant percentiles and ages; builds the models, the MLB Trade Rumors benchmark, the 2027 projections, and the option calls
+
+Outputs are written to `outputs/`.
 
 ## 12. References and Data Credits
 
-- Baseball Savant / Statcast, MLB Advanced Media
-- FanGraphs
-- Spotrac, Cot's Baseball Contracts
-- MLB Trade Rumors
-- `pybaseball` library
-- [Papers or articles on aging curves and contract valuation that you read]
+- Spotrac: free agent contract tables
+- Baseball Reference: bWAR
+- Baseball Savant / Statcast, MLB Advanced Media: percentile ranks
+- MLB Stats API: player birth dates
+- MLB Trade Rumors: projected 2026-27 free agent list, option terms, and annual Top 50 predictions
+- `pybaseball` library, used to pull bWAR and Savant data
 
 ---
 
@@ -345,9 +386,61 @@ Run order:
 | 2026-10-25 | Decided to keep model outputs mechanical and handle outliers separately: Tarik Skubal's model projection ($32.2M AAV) is labeled a lower bound and will be shown next to a reference range from precedent contracts in the data and MLBTR's own published prediction; a calibration correction for star players will be tested on out-of-sample years before being applied to anyone | A hand-edited number for one player would mean applying a different standard to him than to everyone else; no past contract resembles what he is expected to receive|
 | 2026-10-25 | Looked up precedent for Tarik Skubal's projection in the contracts data: closest comparable by age and weighted WAR is Gerrit Cole (2020, 9 years, $324M); top pitcher AAVs excluding Ohtani are $34M-$43.3M; Skubal's model AAV ($32.2M) sits below most of them and the model's 5-year length is below the 7-9 years of the longest deals for pitchers in their early thirties | Shows how far below precedent the model's output is without editing it; reference figures are nominal and labeled as non-model |
 | 2026-10-25 | Generated option and opt-out calls for 61 players (fa_2027_option_calls.csv): 35 of 61 are toss-ups at a $4M margin (25 at $2.5M, 47 at $6M); clearest calls are Acuña (club exercises), Alcantara and Robert (club declines), Severino (player exercises); no player is called to opt out; fixed the mutual-option label for options with no buyout | The margin reflects the model's uncertainty, so a large share of toss-ups is a result in itself; opt-out calls lean toward "stays" because the model underpredicts stars |
+| 2026-11-02 | Wrote abstract (Section 1) | Used results from Sections 7 and 8; replaced two-stage description with direct AAV and years prediction |
+| 2026-11-02 | Updated motivation (Section 2) | Replaced pitch shape and bat speed wording with what the models use; added answers pointing to results |
+| 2026-11-02 | Updated scope and definitions (Section 3) | Replaced template placeholders with the actual class convention and exclusions (zero-value rows, QO acceptances, international signees, Ohtani) |
+| 2026-11-02 | Added dataset summary (Section 4.3) | Contracts per class by hitters and pitchers, with median AAV; 1,600 contracts total |
+| 2026-11-02 | Rewrote methodology (Section 5) | Replaced the two-stage WAR plan with the direct AAV and years ridge models actually built; documented Savant features, aging terms, and rejected variants |
+| 2026-11-02 | Wrote uncertainty section (5.6) | Documented years range, lower-bound flag for $20M+ AAV, and the $4M option margin; noted that no formal prediction intervals were fit |
+| 2026-11-02 | Rewrote validation (Section 6) | Documented the single split, rolling-year check, MAE metrics, MLB Trade Rumors benchmark, year-trend handling of inflation, and the caveat about tuning on test years |
+| 2026-11-02 | Revised limitations (Section 9) | Corrected the bat speed wording (not used), added contract length compression, unmatched 2027 players, and removed the Pivetta verification now that his option is confirmed |
+| 2026-11-02 | Updated reproduction steps (Section 11) | Replaced template notebook list with the current notebooks and documented the manually collected inputs |
+| 2026-11-02 | Wrote data dictionary (Appendix B) | Documented the training table, projection output, and option-calls fields |
 
 ## Appendix B: Data Dictionary
 
+**Training table** (`data/processed/contracts_model.csv`, one row per contract)
+
 | Field | Description | Source |
 |---|---|---|
-| [field] | [description] | [source] |
+| `player_name` | Player name as listed in the contract table | Spotrac |
+| `signing_year` | Free agent class (offseason after season *N* is class *N*+1) | Spotrac |
+| `position` | First listed position | Spotrac |
+| `player_type` | Hitter or pitcher, which decides which model applies | Derived from position |
+| `years` | Guaranteed contract years | Spotrac |
+| `total_value` | Total guaranteed dollars | Spotrac |
+| `aav` | Average annual value: total value divided by years | Derived |
+| `qualifying_offer` | 1 if the player received a qualifying offer, from the " QO" label | Spotrac |
+| `mlb_ID` | MLBAM player ID used to join stats and ages | Name match |
+| `war_1`, `war_2`, `war_3` | bWAR in the most recent, second, and third most recent seasons (missing counted as 0) | Baseball Reference |
+| `war_w` | Weighted WAR: (5 × `war_1` + 4 × `war_2` + 3 × `war_3`) / 12 | Derived |
+| `age_at_signing` | Age on the signing date | MLB Stats API |
+| `age_sq` | (age at signing − 31)² | Derived |
+| `year` | Signing year minus 2015, a market trend term | Derived |
+| Savant features (hitters) | `xwoba`, `brl_percent`, `exit_velocity`, `chase_percent`, `whiff_percent`, `bb_percent`, `sprint_speed`: percentile ranks, 5-4-3 weighted over available seasons; missing filled with 50 | Baseball Savant |
+| Savant features (pitchers) | `xera`, `fb_velocity`, `k_percent`, `bb_percent`, `whiff_percent`, `chase_percent`, `hard_hit_percent`: percentile ranks, weighted the same way | Baseball Savant |
+
+**Projection output** (`outputs/fa_2027_contract_projections.csv`, one row per 2027 free agent)
+
+| Field | Description |
+|---|---|
+| `pred_aav_m` | Predicted AAV in $M |
+| `pred_years` | Predicted guaranteed years, rounded to whole years |
+| `years_low`, `years_high` | Predicted years minus and plus one |
+| `pred_total_m` | Predicted AAV times predicted years, in $M |
+| `lower_bound` | True when the projection is about $20M a year or more and should be read as a floor |
+| `below_5m_floor` | True when the prediction is under $5M, meaning only "a small deal" |
+| `option_note` | Option or opt-out terms from MLB Trade Rumors |
+| `note` | Context the model cannot see (for example Skubal and Acuña) |
+
+**Option calls** (`outputs/fa_2027_option_calls.csv`)
+
+| Field | Description |
+|---|---|
+| `option_type` | Club, mutual, player, or opt-out |
+| `amount_m` | Option salary or remaining guaranteed money, in $M |
+| `buyout_m` | Buyout in $M, where one exists |
+| `optout_years` | Years remaining on an opt-out contract |
+| `call` | Exercise, decline, stay, or toss-up, with strength (lean or strong) |
+| `reason` | Projected AAV compared with the option cost |
+| `needs_review` | True when the option terms need checking |

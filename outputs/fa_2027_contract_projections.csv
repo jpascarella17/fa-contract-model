@@ -1,5 +1,5 @@
 player_name,position,age_at_signing,pred_aav_m,pred_years,years_low,years_high,pred_total_m,lower_bound,below_5m_floor,option_note,note
-Tarik Skubal,SP,30.0,32.2,5.0,4.0,6.0,161.0,True,False,,outlier: model likely far too low
+Tarik Skubal,SP,30.0,32.2,5.0,4.0,6.0,161.0,True,False,,"outlier: model output is a floor. Closest precedent by age and weighted WAR is Gerrit Cole (2020): 9 years, $324M ($36M AAV); top pitcher AAVs excluding Ohtani are about $34M-$43M. MLBTR expects over $400M"
 Seiya Suzuki,RF,32.3,24.0,3.0,2.0,4.0,72.0,True,False,,
 Drew Rasmussen,SP,31.3,22.9,3.0,2.0,4.0,69.0,True,False,$20MM club option with a $500K buyout,
 Randy Arozarena,LF,31.8,21.3,3.0,2.0,4.0,64.0,True,False,,
@@ -159,7 +159,7 @@ Jake Rogers,C,31.6,7.1,1.0,1.0,2.0,7.0,False,False,,
 Kevin Newman,SS,33.3,7.0,1.0,1.0,2.0,7.0,False,False,,
 Yimi Garcia,RP,36.3,7.0,1.0,1.0,2.0,7.0,False,False,,
 Lane Thomas,CF,31.3,7.1,1.0,1.0,2.0,7.0,False,False,,
-Kyle Freeland,SP,33.5,7.1,1.0,1.0,2.0,7.0,False,False,$17MM player option for 2027 with 170 innings pitched in 2026,
+Kyle Freeland,SP,33.5,7.1,1.0,1.0,2.0,7.0,False,False,$17MM player option for 2027 with 170 innings pitched in 2026,2027 player option did not vest (under 170 IP in 2026); treated as a free agent
 Chris Paddack,SP,30.9,6.9,1.0,1.0,2.0,7.0,False,False,,
 Paul Goldschmidt,1B,39.2,7.0,1.0,1.0,2.0,7.0,False,False,,
 Kyle Hart,SP,34.0,6.9,1.0,1.0,2.0,7.0,False,False,$2.5MM club option with $200K buyout,
