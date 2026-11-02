@@ -271,6 +271,13 @@ For the 61 players with an option or opt-out noted by MLB Trade Rumors (Kyle Fre
 
 The clearest calls are the club exercising Ronald Acuña Jr.'s option (net cost $7.0 million against a projected $20.8 million a year), the club declining Sandy Alcantara's and Luis Robert Jr.'s options, and Luis Severino exercising his $22 million player option against a projected $14.1 million. The share of toss-ups depends on the margin: 25 of 61 at $2.5 million, 36 at $4 million (35 after Chapman's option, which is guaranteed, is set aside), and 47 at $6 million. No player is called to opt out. This is largely because the model underpredicts stars, so the opt-out calls mean "the model sees no reason to leave".
 
+**Early check against actual decisions.** As of November 2, 2026, 23 of the 61 options had been decided according to public reports. The model made a clear call (not a toss-up) on 11 of them and was right on 9. The other 12 were toss-ups, so they don't count for or against the model. Both misses were lean calls:
+
+- **Michael King** was called to stay on his contract, but he opted out and will test free agency. His projected AAV ($19.1M) was below what staying paid ($29.0M a year), so the model saw no reason to leave. The market for a top pitcher is likely higher than the model can see, which is consistent with its underprediction of stars (Section 7.4).
+- **Sandy Alcantara** was called to be declined by the Marlins at a projected AAV of $14.1M against a $19.0M net option cost, but the club exercised the option. The model cannot see context such as his recovery from injury or the club's view of his upside.
+
+Eleven clear calls is a small sample, so 9 of 11 is a rough guide, not a measured accuracy. Decisions came from published trackers (MLB Data Warehouse, Rounding Third) and should be checked against MLB Trade Rumors or team announcements. This section will be updated when the remaining options are decided.
+
 ## 9. Limitations
 
 - **Selection bias:** Only players who reached free agency appear in training data, and they skew toward good performers.
@@ -318,8 +325,12 @@ The processed data files in `data/processed/` are included, so the models and pr
 - **MLB Trade Rumors:** the projected 2026-27 free agent list and the 2024 to 2026 Top 50 predictions, saved as text in `data/raw/` (not included in the repository).
 
 Run order:
+Run order:
 1. `notebooks/01_contracts_check.ipynb`: loads and checks the cleaned contract tables
-2. `notebooks/02_pull_stats.ipynb`: pulls WAR, Savant percentiles and ages; builds the models, the MLB Trade Rumors benchmark, the 2027 projections, and the option calls
+2. `notebooks/02_data_build.ipynb`: pulls WAR, Savant percentiles and ages, and builds the model table
+3. `notebooks/03_models.ipynb`: baseline, year trend, Savant comparison, and rolling check
+4. `notebooks/04_benchmark.ipynb`: MLB Trade Rumors benchmark
+5. `notebooks/05_2027_projections.ipynb`: 2027 projections, length model, and option calls
 
 Outputs are written to `outputs/`.
 
@@ -396,6 +407,8 @@ Outputs are written to `outputs/`.
 | 2026-11-02 | Revised limitations (Section 9) | Corrected the bat speed wording (not used), added contract length compression, unmatched 2027 players, and removed the Pivetta verification now that his option is confirmed |
 | 2026-11-02 | Updated reproduction steps (Section 11) | Replaced template notebook list with the current notebooks and documented the manually collected inputs |
 | 2026-11-02 | Wrote data dictionary (Appendix B) | Documented the training table, projection output, and option-calls fields |
+| 2026-11-02 | Split the combined notebook | Separated 02_pull_stats into data build, models, benchmark, and projections notebooks; each re-run to confirm it executes cleanly |
+| 2026-11-02 | Checked option calls against actual decisions (Section 8) | 23 of 61 options decided; 9 of 11 clear calls correct (misses: King, Alcantara); 12 toss-ups |
 
 ## Appendix B: Data Dictionary
 

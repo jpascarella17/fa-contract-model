@@ -22,6 +22,7 @@ The full process, with every decision logged, is in [methodology.md](methodology
 | Do Savant percentiles help? | A little. In a rolling check (train on all earlier classes, test each year 2021-2026), pitcher error fell from $3.46M to $3.28M and Savant was better in all six years. Hitter error fell from $3.93M to $3.67M, but Savant was better in only three of six years, all recent. |
 | How does it compare with experts? | It is behind. On 120 players in MLB Trade Rumors' Top 50 for the 2024-2026 classes, their average AAV miss was $3.15M and the model's was $4.13M. The gap is concentrated in contracts of $20M a year or more ($8.16M vs $5.02M); below that the two are within about $0.3M. |
 | Can it predict contract length? | Partly. Average miss of 0.81 years against 1.03 for a flat two-year guess, but long deals for stars are compressed. Total value is further behind MLB Trade Rumors ($24.8M vs $19.9M average miss). |
+| Were the option calls right? | Early check: 9 of 11 clear calls correct against 23 decisions reported so far, with 12 toss-ups. Small sample; to be updated. |
 
 The main weakness is the top of the market. The models underpredict stars (about $6M a year for hitters above 3.5 weighted WAR), so projected totals for the highest-value players should be read as lower bounds. Tarik Skubal is flagged as an outlier and shown next to precedent contracts instead of being adjusted.
 
