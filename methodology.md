@@ -269,13 +269,13 @@ For the 61 players with an option or opt-out noted by MLB Trade Rumors (Kyle Fre
 
 The clearest calls are the club exercising Ronald Acuña Jr.'s option (net cost $7.0 million against a projected $20.8 million a year), the club declining Sandy Alcantara's and Luis Robert Jr.'s options, and Luis Severino exercising his $22 million player option against a projected $14.1 million. The share of toss-ups depends on the margin: 25 of 61 at $2.5 million, 36 at $4 million (35 after Chapman's option, which is guaranteed, is set aside), and 47 at $6 million. No player is called to opt out. This is largely because the model underpredicts stars, so the opt-out calls mean "the model sees no reason to leave".
 
-**Check against actual decisions.** As of November 2, 2026, 51 of the 61 options had been decided according to public reports. The model made a clear call (not a toss-up) on 23 of them and was right on 19 (83%). The other 28 were toss-ups, so they count neither for nor against the model. Four clear calls were wrong:
+**Check against actual decisions.** As of November 2, 2026, 55 of the 61 options had been decided according to public reports. The model made a clear call (not a toss-up) on 24 of them and was right on 20 (83%). The other 31 were toss-ups or had no clear call, so they count neither for nor against the model. Four clear calls were wrong:
 
 - **Michael King** was called to stay on his contract, but he opted out and will test free agency. His projected AAV ($19.1M) was well below what staying paid ($29.0M a year), so the model saw no reason to leave. The market for a top pitcher is likely higher than the model can see, which is consistent with its underprediction of stars (Section 7.4).
 - **Sandy Alcantara** was called to be declined at a projected AAV of $14.1M against a $19.0M net option cost, but the Marlins exercised the option. The model cannot see context such as his recovery from injury or the club's view of his upside.
 - **Jacob Webb and Robert Stephenson** were both called to be exercised, but both $2.5M club options were declined. Projections under $5M only mean "a small deal" (the models were trained on contracts of $5M or more), so calls on cheap relief options are less reliable than the rest.
 
-Twenty-three clear calls is a small sample, so 19 of 23 is a rough guide, not a measured accuracy. Ten options are excluded: five are still undecided (Kenley Jansen, Drew Anderson, Myles Straw, Antonio Senzatela, Gary Sánchez), Aroldis Chapman's is guaranteed, Marcell Ozuna and Carlos Santana were released and Austin Hays changed teams during the season, so no clear option decision was made, and Emmanuel Clase is out of the league on a suspension. Decisions come from published trackers (MLB Data Warehouse, Rounding Third) and player-by-player reports, and should be checked against MLB Trade Rumors or team announcements.
+Twenty-four clear calls is a small sample, so 20 of 24 is a rough guide, not a measured accuracy. Six options are not scored: Drew Anderson's is still undecided, Aroldis Chapman's is guaranteed, Marcell Ozuna and Carlos Santana were released and Austin Hays changed teams during the season, so no clear option decision was made, and Emmanuel Clase is out of the league on a suspension. Decisions come from published trackers (MLB Data Warehouse, Rounding Third) and player-by-player reports, and should be checked against MLB Trade Rumors or team announcements.
 
 ## 9. Limitations
 
@@ -408,6 +408,8 @@ Outputs are written to `outputs/`.
 | 2026-11-02 | Wrote data dictionary (Appendix B) | Documented the training table, projection output, and option-calls fields |
 | 2026-11-02 | Split the combined notebook | Separated 02_pull_stats into data build, models, benchmark, and projections notebooks; each re-run to confirm it executes cleanly |
 | 2026-11-02 | Checked option calls against actual decisions (Section 8) | 23 of 61 options decided; 9 of 11 clear calls correct (misses: King, Alcantara); 12 toss-ups |
+| 2026-11-02 | Scored option calls against actual decisions (Section 8) | 51 of 61 options decided; 19 of 23 clear calls correct (misses: King, Alcantara, Webb, Stephenson); 28 toss-ups; 10 excluded or pending |
+| 2026-11-02 | Scored option calls against actual decisions (Section 8) | 55 of 61 options decided; 20 of 24 clear calls correct (misses: King, Alcantara, Webb, Stephenson); 31 toss-ups or no clear call; 6 not scored |
 
 ## Appendix B: Data Dictionary
 
