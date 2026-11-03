@@ -330,6 +330,7 @@ Run order:
 3. `notebooks/03_models.ipynb`: baseline, year trend, Savant comparison, and rolling check
 4. `notebooks/04_benchmark.ipynb`: MLB Trade Rumors benchmark
 5. `notebooks/05_2027_projections.ipynb`: 2027 projections, length model, and option calls
+6. `notebooks/06_visualizations.ipynb`: charts of predicted vs actual AAV, error by contract size, and the 2027 projections (saved to `outputs/figures/`)
 
 Outputs are written to `outputs/`.
 
@@ -410,6 +411,7 @@ Outputs are written to `outputs/`.
 | 2026-11-02 | Checked option calls against actual decisions (Section 8) | 23 of 61 options decided; 9 of 11 clear calls correct (misses: King, Alcantara); 12 toss-ups |
 | 2026-11-02 | Scored option calls against actual decisions (Section 8) | 51 of 61 options decided; 19 of 23 clear calls correct (misses: King, Alcantara, Webb, Stephenson); 28 toss-ups; 10 excluded or pending |
 | 2026-11-02 | Scored option calls against actual decisions (Section 8) | 55 of 61 options decided; 20 of 24 clear calls correct (misses: King, Alcantara, Webb, Stephenson); 31 toss-ups or no clear call; 6 not scored |
+| 2026-11-02 | Added visualizations | New notebook 06 with charts of predicted vs actual AAV, error by contract size, and the 2027 top 15; images saved to outputs/figures |
 
 ## Appendix B: Data Dictionary
 

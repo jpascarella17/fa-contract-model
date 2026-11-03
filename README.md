@@ -40,7 +40,7 @@ The main weakness is the top of the market. The models underpredict stars (about
 
 ```
 data/processed/   cleaned contracts, season stats, Savant data, 2027 free agent list
-notebooks/        01_contracts_check, 02_data_build, 03_models, 04_benchmark, 05_2027_projections
+notebooks/        01_contracts_check, 02_data_build, 03_models, 04_benchmark, 05_2027_projections, 06_visualizations
 src/              clean_contracts.py (cleans one Spotrac class table)
 outputs/          projections, option calls, benchmark
 methodology.md    full write-up and process log
