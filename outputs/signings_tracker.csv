@@ -1,2 +1,4 @@
-player_name,team,actual_aav_m,actual_years,source,date
-Emilio Pagan,Tigers,11.0,1,reported signing,2026-11-11
+player_name,team,actual_aav_m,actual_years,source,date,type
+Emilio Pagan,Tigers,11.0,1,reported signing,2026-11-11,new team
+Jacob Webb,Cubs,2.0,1,https://sports.yahoo.com/articles/chicago-cubs-sign-jacob-webb-195306791.html,2026-11-02,re-sign
+Tim Mayza,Phillies,2.75,1,https://jaysjournal.com/phillies-resign-former-blue-jays-reliever-tim-mayza-who-had-bounce-back-2026-campaign,2026-10-18,re-sign
