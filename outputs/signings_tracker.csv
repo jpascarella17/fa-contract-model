@@ -1,4 +1,6 @@
-player_name,team,actual_aav_m,actual_years,source,date,type
-Emilio Pagan,Tigers,11.0,1,reported signing,2026-11-11,new team
-Jacob Webb,Cubs,2.0,1,https://sports.yahoo.com/articles/chicago-cubs-sign-jacob-webb-195306791.html,2026-11-02,re-sign
-Tim Mayza,Phillies,2.75,1,https://jaysjournal.com/phillies-resign-former-blue-jays-reliever-tim-mayza-who-had-bounce-back-2026-campaign,2026-10-18,re-sign
+player_name,team,actual_aav_m,actual_years,source,date,type,in_scope
+Emilio Pagan,Tigers,11.0,1,[source link],2026-11-11,[new team or re-sign],yes
+Jacob Webb,Cubs,2.0,1,https://sports.yahoo.com/articles/chicago-cubs-sign-jacob-webb-195306791.html,2026-11-02,re-sign,no
+Tim Mayza,Phillies,2.75,1,https://jaysjournal.com/phillies-resign-former-blue-jays-reliever-tim-mayza-who-had-bounce-back-2026-campaign,2026-10-18,re-sign,no
+Ryan Weiss,Padres,1.85,1,https://www.espn.com/nba/story/_/id/50449822/rhp-ryan-weiss-agrees-185m-deal-padres-sources-say,2026-11-10,new team,no
+Jake Bauers,Red Sox,14.5,4,https://sports.yahoo.com/mlb/breaking-news/article/1b-jake-bauers-nlcs-mvp-with-brewers-reportedly-agrees-to-4-year-58-million-deal-with-red-sox-175633947.html,2026-11-13,new team,yes
