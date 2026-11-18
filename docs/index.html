@@ -134,7 +134,7 @@ li { max-width: 66ch; }
     <h1>Signings vs Projections</h1>
     <p class="lede">Each reported 2027 free agent signing next to what the model projected for that player. Average annual value (AAV) is in millions of dollars and counts guaranteed money only.</p>
     <div class="meta">
-      <span>Updated Nov 16, 2026</span>
+      <span>Updated Nov 17, 2026</span>
       <span><span id="count"></span></span>
       <a href="https://github.com/jpascarella17/fa-contract-model">Code and methodology on GitHub</a>
     </div>
@@ -179,9 +179,10 @@ li { max-width: 66ch; }
     <div class="card">
       <h2>What stands out</h2>
       <ul>
-        <li><b>Length is the larger miss.</b> Bauers signed for 4 years against a projected 2, and Phillips for 3 against 1. Pagán went the other way, 1 year against 2.</li>
-        <li><b>AAV is close for the three in-scope deals.</b> Each is within $2.5M of the projection.</li>
+        <li><b>Length is the larger miss.</b> Bauers signed for 4 years against a projected 2, Phillips for 3 against 1, and May for 3 against 1. Pagán went the other way, 1 year against 2.</li>
+        <li><b>AAV is close for three of the four in-scope deals,</b> each within $2.5M of the projection. Dustin May is the exception: $17.5M a year against a projected $10.3M.</li>
         <li><b>Small relief deals come in far below the projection.</b> Webb, Mayza and Weiss were projected at $6.7M to $8.2M and signed for $1.85M to $2.75M. Hill, projected at $3.1M, signed for $2.25M.</li>
+        <li><b>Both qualifying offer acceptances landed above the projection.</b> Jeffers took $23.15M against a projected $18.1M a year, and Bednar took the same against $12.8M. Those salaries are set by formula, so they are not scored.</li>
       </ul>
     </div>
     <div class="card">
@@ -189,36 +190,43 @@ li { max-width: 66ch; }
       <ul>
         <li><b>In scope</b> means a contract worth at least $5M in total. The model trains only on deals that size, so smaller deals are shown here but fall outside what it was built to predict.</li>
         <li><b>Projected total</b> is projected AAV times whole projected years.</li>
-        <li>Seven signings are too few to judge accuracy, so no average is shown.</li>
+        <li><b>Qualifying offer acceptances</b> take a one-year salary set by formula ($23.15M this year). They are shown but not scored, and the model's training data excludes them.</li>
+        <li>Four in-scope signings are too few to judge accuracy, so no average is shown.</li>
       </ul>
     </div>
   </section>
 
   <section class="foot" aria-label="Notes">
-       <p><b>Notes.</b> Reported means a news report of an agreement that is not yet official. Weiss: guaranteed terms only; his deal also includes a 2028 team option and performance bonuses.</p>
+    <p><b>Notes.</b> Reported means a news report of an agreement that is not yet official. Accepted means the player accepted a qualifying offer by the deadline. Weiss: guaranteed terms only; his deal also includes a 2028 team option and performance bonuses.</p>
   </section>
 </div>
 
 <script>
 // Rows are listed in the order they appear. Add a new object here as signings come in.
 var D = [
+  { n: "Dustin May",    team: "White Sox", kind: "New team", date: "Nov 17", scope: true,  pos: "SP",
+    pA: 10.3, pY: 1, pT: 10.0, aA: 17.5,  aY: 3, aT: 52.5, status: "Reported", src: "https://sports.yahoo.com/articles/hander-dustin-may-signs-3-170539474.html" },
   { n: "Jake Bauers",   team: "Red Sox",  kind: "New team", date: "Nov 13", scope: true,  pos: "1B",
     pA: 12.7, pY: 2, pT: 25.0, aA: 14.5,  aY: 4, aT: 58.0, status: "Reported", src: "https://sports.yahoo.com/mlb/breaking-news/article/1b-jake-bauers-nlcs-mvp-with-brewers-reportedly-agrees-to-4-year-58-million-deal-with-red-sox-175633947.html" },
   { n: "Evan Phillips", team: "Braves",   kind: "New team", date: "Nov 12", scope: true,  pos: "RP",
     pA: 9.2,  pY: 1, pT: 9.0,  aA: 11.667, aY: 3, aT: 35.0, status: "Signed", src: "https://sports.yahoo.com/mlb/breaking-news/article/evan-phillips-signs-3-year-35-million-deal-with-braves-203656422.html" },
-    { n: "Emilio Pagán",  team: "Tigers",   kind: "New team", date: "Nov 11", scope: true,  pos: "RP",
+  { n: "Emilio Pagán",  team: "Tigers",   kind: "New team", date: "Nov 11", scope: true,  pos: "RP",
     pA: 11.5, pY: 2, pT: 23.0, aA: 11.0,  aY: 1, aT: 11.0, status: "Reported", src: "https://www.nbcsports.com/fantasy/baseball/player-news/2026-11-11/report-tigers-sign-emilio-pagan-for-11-million" },
   { n: "Tim Hill",      team: "Yankees",  kind: "Re-signed", date: "Nov 15", scope: false, pos: "RP",
     pA: 3.1,  pY: 1, pT: 3.0,  aA: 2.25,  aY: 1, aT: 2.25, status: "Reported", src: "https://sports.yahoo.com/mlb/article/yankees-reportedly-re-sign-lefty-reliever-tim-hill-to-1-year-225-million-deal-221804576.html" },
   { n: "Ryan Weiss",    team: "Padres",   kind: "New team", date: "Nov 10", scope: false, pos: "RP",
     pA: 8.2,  pY: 1, pT: 8.0,  aA: 1.85,  aY: 1, aT: 1.85, status: "Reported", src: "https://www.espn.com/nba/story/_/id/50449822/rhp-ryan-weiss-agrees-185m-deal-padres-sources-say" },
-    { n: "Jacob Webb",    team: "Cubs",     kind: "Re-signed", date: "Nov 2",  scope: false, pos: "RP",
+  { n: "Jacob Webb",    team: "Cubs",     kind: "Re-signed", date: "Nov 2",  scope: false, pos: "RP",
     pA: 7.4,  pY: 2, pT: 15.0, aA: 2.0,   aY: 1, aT: 2.0,  status: "Signed", src: "https://sports.yahoo.com/articles/chicago-cubs-sign-jacob-webb-195306791.html" },
   { n: "Tim Mayza",     team: "Phillies", kind: "Re-signed", date: "Oct 18", scope: false, pos: "RP",
-    pA: 6.7,  pY: 1, pT: 7.0,  aA: 2.75,  aY: 1, aT: 2.75, status: "Signed", src: "https://jaysjournal.com/phillies-resign-former-blue-jays-reliever-tim-mayza-who-had-bounce-back-2026-campaign" }
+    pA: 6.7,  pY: 1, pT: 7.0,  aA: 2.75,  aY: 1, aT: 2.75, status: "Signed", src: "https://jaysjournal.com/phillies-resign-former-blue-jays-reliever-tim-mayza-who-had-bounce-back-2026-campaign" },
+  { n: "David Bednar",  team: "Yankees",  kind: "QO accepted", date: "Nov 17", scope: false, qo: true, pos: "RP",
+    pA: 12.8, pY: 2, pT: 26.0, aA: 23.15, aY: 1, aT: 23.15, status: "Accepted", src: "https://sports.yahoo.com/articles/david-bednar-returning-yankees-23-224735007.html" },
+  { n: "Ryan Jeffers",  team: "Twins",    kind: "QO accepted", date: "Nov 17", scope: false, qo: true, pos: "C",
+    pA: 18.1, pY: 3, pT: 54.0, aA: 23.15, aY: 1, aT: 23.15, status: "Accepted", src: "https://www.mlb.com/news/ryan-jeffers-accepts-twins-qualifying-offer" }
 ];
 
-var MAX = 16;
+var MAX = 24;
 function r2(x) { return Math.round(x * 100) / 100; }
 function money(v) { return "$" + r2(v) + "M"; }
 function signed(v, dec) {
@@ -230,16 +238,17 @@ function signed(v, dec) {
 }
 function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 function label(d) {
-  return esc(d.n);
+  return esc(d.n) + (d.mark || "");
 }
 
 // Count line
 var inScope = D.filter(function (d) { return d.scope; }).length;
-document.getElementById("count").textContent = D.length + " signings logged, " + inScope + " in scope";
+var qoCount = D.filter(function (d) { return d.qo; }).length;
+document.getElementById("count").textContent = D.length + " signings logged, " + inScope + " in scope, " + qoCount + " qualifying offer acceptances";
 
 // Axis
 var ax = "";
-for (var t = 0; t <= MAX; t += 4) { ax += '<span style="left:' + (t / MAX * 100) + '%">$' + t + 'M</span>'; }
+for (var t = 0; t <= MAX; t += 6) { ax += '<span style="left:' + (t / MAX * 100) + '%">$' + t + 'M</span>'; }
 document.getElementById("axis").innerHTML = ax;
 
 // Chart
@@ -258,7 +267,9 @@ var chart = "";
 chart += '<div class="group-title">In scope</div><div class="group-note">Contracts worth at least $5M in total, the range the model is trained on.</div>';
 chart += D.filter(function (d) { return d.scope; }).map(rowHtml).join("");
 chart += '<div class="group-title">Below the $5M threshold</div><div class="group-note">Shown for reference. These deals fall outside the range the model is trained on.</div>';
-chart += D.filter(function (d) { return !d.scope; }).map(rowHtml).join("");
+chart += D.filter(function (d) { return !d.scope && !d.qo; }).map(rowHtml).join("");
+chart += '<div class="group-title">Accepted a qualifying offer</div><div class="group-note">A one-year salary set by formula, not a negotiated contract. Shown for reference and not scored.</div>';
+chart += D.filter(function (d) { return d.qo; }).map(rowHtml).join("");
 document.getElementById("chart").innerHTML = chart;
 
 // Table
@@ -270,15 +281,17 @@ function tr(d) {
     '<td>' + who + '</td>' +
     '<td class="n">' + money(d.pA) + " &times; " + d.pY + " yr<br><span class=\"muted\">" + money(d.pT) + " total</span></td>" +
     '<td class="n">' + money(d.aA) + " &times; " + d.aY + " yr<br><span class=\"muted\">" + money(d.aT) + " total</span></td>" +
-    '<td class="n">' + signed(gA, true) + '</td>' +
-    '<td class="n">' + signed(gY, false) + '</td>' +
-    '<td class="n">' + signed(gT, true) + '</td>' +
+    '<td class="n">' + (d.qo ? "n/a" : signed(gA, true)) + '</td>' +
+    '<td class="n">' + (d.qo ? "n/a" : signed(gY, false)) + '</td>' +
+    '<td class="n">' + (d.qo ? "n/a" : signed(gT, true)) + '</td>' +
     '<td>' + status + '</td></tr>';
 }
 var rows = '<tr class="sep"><td colspan="7">In scope</td></tr>' +
   D.filter(function (d) { return d.scope; }).map(tr).join("") +
   '<tr class="sep"><td colspan="7">Below the $5M threshold</td></tr>' +
-  D.filter(function (d) { return !d.scope; }).map(tr).join("");
+  D.filter(function (d) { return !d.scope && !d.qo; }).map(tr).join("") +
+  '<tr class="sep"><td colspan="7">Accepted a qualifying offer (not scored)</td></tr>' +
+  D.filter(function (d) { return d.qo; }).map(tr).join("");
 document.getElementById("rows").innerHTML = rows;
 </script>
 
