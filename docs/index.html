@@ -179,8 +179,8 @@ li { max-width: 66ch; }
     <div class="card">
       <h2>What stands out</h2>
       <ul>
-        <li><b>Length is off in nine of the thirteen in-scope deals,</b> and seven of those signed longer than projected. Skubal signed for 9 years against a projected 5, Peralta and Rogers for 5 against 3, Bauers for 4 against 2, Phillips for 3 against 1, May for 3 against 1, and Taylor for 2 against 1. Pagán (1 year against 2) and Bubic (1 against 2) went the other way. Gray, Loáisiga, Goldschmidt and Kim matched.</li>
-        <li><b>AAV is close for six of the thirteen in-scope deals.</b> Pagán matched the projection exactly at $11.5M a year, Loáisiga, Goldschmidt and Taylor were within $1M, and Bauers and Phillips were within $2.5M. Six signed for much more than projected: Skubal at about $50M against $32.2M, Gray at $27.5M against $16.9M, May at $17.5M against $10.3M, Peralta at about $25M against $19.3M, Rogers at about $24M against $18.2M, and Bubic at $17.5M against $14.4M. Ha-Seong Kim is the one large miss the other way: $5M against a projected $11.7M. Nine of the thirteen signed above the projection and three below. The model flagged Skubal's projection as a floor.</li>
+        <li><b>Length is off in nine of the fifteen in-scope deals,</b> and seven of those signed longer than projected. Skubal signed for 9 years against a projected 5, Peralta and Rogers for 5 against 3, Bauers for 4 against 2, Phillips for 3 against 1, May for 3 against 1, and Taylor for 2 against 1. Pagán (1 year against 2) and Bubic (1 against 2) went the other way. Gray, Loáisiga, Goldschmidt, Kim, Stephenson and Bohm matched.</li>
+        <li><b>AAV is close for seven of the fifteen in-scope deals.</b> Pagán matched the projection exactly at $11.5M a year, Loáisiga, Goldschmidt and Taylor were within $1M, and Bohm, Bauers and Phillips were within $2.5M. Six signed for much more than projected: Skubal at about $50M against $32.2M, Gray at $27.5M against $16.9M, May at $17.5M against $10.3M, Peralta at about $25M against $19.3M, Rogers at about $24M against $18.2M, and Bubic at $17.5M against $14.4M. Ha-Seong Kim ($5M against a projected $11.7M) and Tyler Stephenson (about $10M against $14.9M) are the large misses the other way. Nine of the fifteen signed above the projection and five below. The model flagged Skubal's projection as a floor.</li>
         <li><b>Small relief deals come in below the projection.</b> Webb, Mayza and Weiss were projected at $6.7M to $8.2M and signed for $1.85M to $2.75M. Thielbar was projected at $5.7M and signed for $3.25M. Hill, projected at $3.1M, signed for $2.25M, and Suter, projected at $4.9M, signed for $4M.</li>
         <li><b>Both qualifying offer acceptances landed above the projection.</b> Jeffers took $23.15M against a projected $18.1M a year, and Bednar took the same against $12.8M. Those salaries are set by formula, so they are not scored.</li>
       </ul>
@@ -191,19 +191,23 @@ li { max-width: 66ch; }
         <li><b>In scope</b> means a contract worth at least $5M in total. The model trains only on deals that size, so smaller deals are shown here but fall outside what it was built to predict.</li>
         <li><b>Projected total</b> is projected AAV times whole projected years.</li>
         <li><b>Qualifying offer acceptances</b> take a one-year salary set by formula ($23.15M this year). They are shown but not scored, and the model's training data excludes them.</li>
-        <li>Thirteen in-scope signings are a small, early sample, so treat any pattern as tentative. No average is shown yet. Gray's $27.5M a year is the reported $55M split evenly over two years, and his deal includes an opt-out whose terms are not public. Loáisiga's deal is pending a physical and has a third-year team option for 2029 that is not counted.</li>
+        <li>Fifteen in-scope signings are a small, early sample, so treat any pattern as tentative. No average is shown yet. Gray's $27.5M a year is the reported $55M split evenly over two years, and his deal includes an opt-out whose terms are not public. Loáisiga's deal is pending a physical and has a third-year team option for 2029 that is not counted.</li>
       </ul>
     </div>
   </section>
 
   <section class="foot" aria-label="Notes">
-    <p><b>Notes.</b> Reported means a news report of an agreement that is not yet official. Accepted means the player accepted a qualifying offer by the deadline. Weiss: guaranteed terms only; his deal also includes a 2028 team option and performance bonuses. Skubal: the reported $450M over nine years split evenly, about $50M a year, with a $45M signing bonus and no opt-outs. Goldschmidt: base salary only, plus up to $2M in bonuses. Suter: a $3.5M club option for 2028 with a $250K buyout is not counted. Peralta and Rogers: the reported totals ($125M and $120M over five years) split evenly. Taylor: the reported $17M over two years split evenly. Kim: a $5M deal sits exactly at the $5M cutoff, so it counts as in scope. Japanese players who signed from Japan's league are not covered.</p>
+    <p><b>Notes.</b> Reported means a news report of an agreement that is not yet official. Accepted means the player accepted a qualifying offer by the deadline. Weiss: guaranteed terms only; his deal also includes a 2028 team option and performance bonuses. Skubal: the reported $450M over nine years split evenly, about $50M a year, with a $45M signing bonus and no opt-outs. Goldschmidt: base salary only, plus up to $2M in bonuses. Suter: a $3.5M club option for 2028 with a $250K buyout is not counted. Peralta and Rogers: the reported totals ($125M and $120M over five years) split evenly. Taylor: the reported $17M over two years split evenly. Kim: a $5M deal sits exactly at the $5M cutoff, so it counts as in scope. Stephenson: the reported $30M over three years split evenly, with an opt-out after 2028 that is not counted. Bohm: the reported $20M over two years split evenly. Both are pending physicals. Japanese players who signed from Japan's league are not covered.</p>
   </section>
 </div>
 
 <script>
 // Rows are listed in the order they appear. Add a new object here as signings come in.
 var D = [
+  { n: "Alec Bohm",     team: "Royals",   kind: "New team", date: "Nov 25", scope: true,  pos: "1B",
+    pA: 11.7, pY: 2, pT: 23.0, aA: 10.0,  aY: 2, aT: 20.0, status: "Reported", src: "https://www.mcall.com/2026/11/25/alec-bohm-heading-to-kansas-city-on-2-year-20-million-deal/" },
+  { n: "Tyler Stephenson", team: "Reds",  kind: "Re-signed", date: "Nov 24", scope: true,  pos: "C",
+    pA: 14.9, pY: 3, pT: 45.0, aA: 10.0,  aY: 3, aT: 30.0, status: "Reported", src: "https://local12.com/sports/reds/reds-keep-catcher-tyler-stephenson-with-30-million-3-year-contract-mlb-baseball-contract-signing-stats-price-deal-cincinnati" },
   { n: "Tyrone Taylor", team: "White Sox", kind: "New team", date: "Nov 24", scope: true,  pos: "CF",
     pA: 9.5,  pY: 1, pT: 10.0, aA: 8.5,   aY: 2, aT: 17.0, status: "Reported", src: "https://www.si.com/mlb/whitesox/onsi/instant-grade-white-sox-sign-tyrone-taylor-to-17-million-deal-after-his-big-2026-24" },
   { n: "Ha-Seong Kim",  team: "Tigers",    kind: "New team", date: "Nov 24", scope: true,  pos: "SS",
